@@ -2,9 +2,18 @@ import React, { useEffect, useState } from 'react'
 import { IoSend } from "react-icons/io5";
 import { IoMdContact } from "react-icons/io";
 import Chat from './Chat';
-import background from "../assets/images/background.png"
-function Chats() {
-    const [chats, setChats] = useState(["hello", "how are you", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello", "Hello"]);
+import { appData } from "../data/data"
+function Chats({ index }) {
+    const [chats, setChats] = useState(index === null ? null : Object.values(appData[index]));
+
+    useEffect(() => {
+        if (index === null) return;
+        setChats(Object.values(appData[index]))
+        console.dir(Object.values(appData[index]))
+        console.log(chats)
+    }, [index])
+
+
     const sendMessage = (event) => {
         const message = event.currentTarget.parentNode.firstChild.value;
         setChats([...chats, message]);
@@ -25,7 +34,11 @@ function Chats() {
                 <div className="contact-name text-xl">Contact Name</div>
             </div>
             <div className=' relative chat-area flex flex-col gap-2 py-2 px-8 flex-1 overflow-y-scroll bg-chat-background'>
-                {chats.map((chat, index) => <Chat key={index} message={chat} />)}
+                {chats && chats.map((chat, index) => {
+                    return chat.map((ch, i) => {
+                        return <Chat key={i} message={ch} />
+                    })
+                })}
             </div>
             <div className="input-box p-2 flex items-center bg-slate-300 justify-center gap-4 w-full">
                 <input type="text" className='bg-slate-400 w-[90%] h-8 px-2 rounded-md outline-none' />
