@@ -1,5 +1,8 @@
 export const appData = [
     {
+        "AI Bot": [],
+    },
+    {
         "Chinam Dibyadyuti Patra": [
             "Hi, how are you?",
             "My name is Chinam Dibyadyuti Patra.",

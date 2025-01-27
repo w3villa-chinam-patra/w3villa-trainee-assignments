@@ -22,7 +22,7 @@ function Contacts({ setIndex, index, setIsDark }) {
           <div className='p-2 hover:bg-neutral-300 dark:hover:bg-neutral-600 rounded-full cursor-pointer' onClick={onClickHandler}>
             <MdLightMode className='text-2xl' />
           </div>
-          <div className='p-2 hover:bg-neutral- dark:hover:bg-neutral-600 rounded-full cursor-pointer'>
+          <div className='p-2 hover:bg-neutral-300 dark:hover:bg-neutral-600 rounded-full cursor-pointer'>
             <BiSolidMessageDetail className='text-2xl' />
           </div>
           <div className='p-3 hover:bg-neutral-300 dark:hover:bg-neutral-600 rounded-full cursor-pointer'>
@@ -30,7 +30,7 @@ function Contacts({ setIndex, index, setIsDark }) {
           </div>
         </div>
       </div>
-      <div className="search-box-container bg-inherit py-2 px-4 shadow-md ">
+      <div className="search-box-container bg-inherit py-2 px-4  ">
         <div className="flex p-2 gap-2 bg-white rounded-md dark:bg-neutral-500">
           <div>
             <CiSearch className='text-xl text-neutral-500 dark:text-neutral-200' />
