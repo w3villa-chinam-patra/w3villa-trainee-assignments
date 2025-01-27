@@ -4,12 +4,13 @@ export default {
     "./index.html",
     "./src/**/*.{js,jsx}",
   ],
+  darkMode: 'class',
   theme: {
     extend: {
-      fontFamily : {
-        
+      fontFamily: {
+
       },
-      backgroundImage :{
+      backgroundImage: {
         "chat-background": "url('./src/assets/images/background.png')",
       }
     },
