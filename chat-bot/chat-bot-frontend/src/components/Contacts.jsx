@@ -17,7 +17,7 @@ function Contacts({ setIndex, index, setIsDark }) {
   return (
     <div className='bg-neutral-100 h-screen flex flex-col dark:text-neutral-100 dark:bg-neutral-700 border-r border-r-neutral-300 dark:border-r-neutral-600'>
       <div className="main-section p-2 flex bg-neutral-200 dark:bg-neutral-700 justify-between ">
-        <img className='w-12' src={logo} alt="logo" />
+        <img className='w-12 m-1' src={logo} alt="logo" />
         <div className="options flex text-neutral-500 dark:text-neutral-200 items-center gap-2 mx-2">
           <div className='p-2 hover:bg-neutral-300 dark:hover:bg-neutral-600 rounded-full cursor-pointer' onClick={onClickHandler}>
             <MdLightMode className='text-2xl' />
