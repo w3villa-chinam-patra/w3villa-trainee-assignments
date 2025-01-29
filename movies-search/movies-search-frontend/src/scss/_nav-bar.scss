@@ -1,0 +1,28 @@
+@use "./variables";
+
+.nav-bar-container {
+    .nav-bar {
+        background-color: variables.$ui-base-light-blue;
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-inline: 0.5rem;
+        margin-block: 1rem;
+        border-radius: 0.5rem;
+        height: 90vh;
+        gap: 2rem;
+
+
+        .logo {
+            width: 60px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            font-size: large;
+        }
+    }
+}

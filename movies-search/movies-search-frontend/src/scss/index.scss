@@ -1,0 +1,23 @@
+// including variables
+@use "./variables";
+
+// including app
+@use "./app";
+
+// includeing nav bar
+@use "./nav-bar";
+
+// including movie section
+@use "./movie-section";
+
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body{
+    font-family: variables.$ui-font;
+    background-color: variables.$ui-base-blue;
+    color: variables.$ui-base-text-color;
+}

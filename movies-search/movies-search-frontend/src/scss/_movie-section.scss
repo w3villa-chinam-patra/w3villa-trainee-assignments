@@ -1,0 +1,102 @@
+@use "./variables";
+
+.movies-section {
+    overflow-y: auto;
+
+    .search-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 2rem;
+
+        input {
+            width: 24rem;
+            height: 100%;
+            font-size: large;
+            outline: none;
+            color: variables.$ui-base-text-color;
+            font-family: variables.$ui-font;
+            text-align: center;
+            background-color: variables.$ui-base-blue;
+            border: 1px solid variables.$ui-base-gray;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+
+
+            &:focus::placeholder {
+                opacity: 0;
+            }
+        }
+    }
+
+    .movies-container {
+        display: grid;
+        gap: 3rem;
+        height: 100vh;
+        grid-template-columns: repeat(auto-fill, minmax(200px, auto));
+        grid-template-rows: auto;
+        align-items: start;
+        padding: 2rem;
+    }
+}
+
+.card-container {
+    border-right: 1px solid variables.$ui-base-gray;
+    border-bottom: 1px solid variables.$ui-base-gray;
+    border-radius: 0.5rem;
+    position: relative;
+    cursor: pointer;
+    transition: transform 0.3s ease-in-out;
+
+    .image-container {
+        position: relative;
+        border-radius: 0.5rem;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            margin-bottom: -5rem;
+        }
+    }
+
+    .bookmark {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        z-index: 10;
+        font-size: larger;
+        background-color: variables.$ui-button-bg;
+        border-radius: 100%;
+        width: 1.8rem;
+        height: 1.8rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .gradient-overlay {
+        position: absolute;
+        background-image: linear-gradient(to bottom, transparent, variables.$ui-base-blue);
+        inset: 0;
+    }
+
+    .movie-info {
+        position: relative;
+
+        .movie-name {
+            width: 100%;
+            font-weight: 800;
+            padding: 0.3rem;
+            font-size: large;
+        }
+
+        .movie-details {
+            font-size: small;
+            opacity: 0;
+            width: 100%;
+            padding-inline: 0.5rem;
+            transition: opacity 0.3s ease-in-out;
+        }
+    }
+}

@@ -1,0 +1,131 @@
+.app-container {
+  display: grid;
+  grid-template-columns: 6rem auto;
+  height: 100vh;
+}
+
+.nav-bar-container .nav-bar {
+  background-color: #192338;
+  padding: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-inline: 0.5rem;
+  margin-block: 1rem;
+  border-radius: 0.5rem;
+  height: 90vh;
+  gap: 2rem;
+}
+.nav-bar-container .nav-bar .logo {
+  width: 60px;
+}
+.nav-bar-container .nav-bar .menu {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  font-size: large;
+}
+
+.movies-section {
+  overflow-y: auto;
+}
+.movies-section .search-box {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 2rem;
+}
+.movies-section .search-box input {
+  width: 24rem;
+  height: 100%;
+  font-size: large;
+  outline: none;
+  color: rgba(255, 255, 255, 0.822);
+  font-family: "Montserrat", serif;
+  text-align: center;
+  background-color: #0F141E;
+  border: 1px solid #5D6D91;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+.movies-section .search-box input:focus::-moz-placeholder {
+  opacity: 0;
+}
+.movies-section .search-box input:focus::placeholder {
+  opacity: 0;
+}
+.movies-section .movies-container {
+  display: grid;
+  gap: 3rem;
+  height: 100vh;
+  grid-template-columns: repeat(auto-fill, minmax(200px, auto));
+  grid-template-rows: auto;
+  align-items: start;
+  padding: 2rem;
+}
+
+.card-container {
+  border-right: 1px solid #5D6D91;
+  border-bottom: 1px solid #5D6D91;
+  border-radius: 0.5rem;
+  position: relative;
+  cursor: pointer;
+  transition: transform 0.3s ease-in-out;
+}
+.card-container .image-container {
+  position: relative;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+.card-container .image-container img {
+  width: 100%;
+  margin-bottom: -5rem;
+}
+.card-container .bookmark {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  z-index: 10;
+  font-size: larger;
+  background-color: rgba(61, 58, 58, 0.74);
+  border-radius: 100%;
+  width: 1.8rem;
+  height: 1.8rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.card-container .gradient-overlay {
+  position: absolute;
+  background-image: linear-gradient(to bottom, transparent, #0F141E);
+  inset: 0;
+}
+.card-container .movie-info {
+  position: relative;
+}
+.card-container .movie-info .movie-name {
+  width: 100%;
+  font-weight: 800;
+  padding: 0.3rem;
+  font-size: large;
+}
+.card-container .movie-info .movie-details {
+  font-size: small;
+  opacity: 0;
+  width: 100%;
+  padding-inline: 0.5rem;
+  transition: opacity 0.3s ease-in-out;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Montserrat", serif;
+  background-color: #0F141E;
+  color: rgba(255, 255, 255, 0.822);
+}/*# sourceMappingURL=index.css.map */
