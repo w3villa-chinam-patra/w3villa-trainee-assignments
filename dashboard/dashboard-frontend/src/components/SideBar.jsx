@@ -13,6 +13,9 @@ import { BiSolidLayout } from "react-icons/bi";
 import { MdContactSupport } from "react-icons/md";
 import { RiSettings4Fill } from "react-icons/ri";
 import { RiLogoutCircleRFill } from "react-icons/ri";
+import { SiGoogleforms } from "react-icons/si";
+import { TbTableFilled } from "react-icons/tb";
+import { FIRST_FORM_ROUTE } from '../routes';
 
 
 
@@ -28,31 +31,63 @@ function SideBar() {
                     heading={"dashboards"}
                     options={[{
                         "icon": <IoGrid />,
-                        "text": "Overview"
+                        "text": "Overview",
+                        "route": "/",
+                    },
+                    {
+                        "icon": <SiGoogleforms />,
+                        "text": "Forms",
+                        "subOptions": [
+                            {
+                                "icon": <SiGoogleforms />,
+                                "text": "First Form",
+                                "route": FIRST_FORM_ROUTE,
+                                "label": "Forms"
+                            },
+                            {
+                                "icon": <SiGoogleforms />,
+                                "text": "Second Form",
+                                "route": "/",
+                                "label": "Forms"
+                            }
+                        ],
+                    },
+                    {
+                        "icon": <TbTableFilled />,
+                        "text": "Table",
+                        "route": "table",
                     },
                     {
                         "icon": <IoCalendar />,
-                        "text": "Calender"
+                        "text": "Calendar",
+                        "route": "calendar",
                     },
                     {
                         "icon": <HiTicket />,
-                        "text": "Tickets"
+                        "text": "Tickets",
+                        "route": "tickets",
                     },
                     {
                         "icon": <FaRegFolderOpen />,
-                        "text": "File Manager"
+                        "text": "File Manager",
+                        "route": "file-manager",
                     },
                     {
                         "icon": <IoMdListBox />,
-                        "text": "Kaban"
+                        "text": "Kaban",
+                        "route": "kaban",
                     },
                     {
                         "icon": <BsFillLayersFill />,
-                        "text": "Projects"
+                        "text": "Projects",
+                        "route": "projects",
+                        "subOptions": [],
                     },
                     {
                         "icon": <FaClipboardList />,
-                        "text": "Tasks"
+                        "text": "Tasks",
+                        "route": "tasks",
+                        "subOptions": [],
                     },
                     ]}
                 />
@@ -62,15 +97,20 @@ function SideBar() {
                     heading={"adminstrartor"}
                     options={[{
                         "icon": <HiUsers />,
-                        "text": "Auth Pages"
+                        "text": "Auth Pages",
+                        "route": "auth-pages",
+                        "subOptions": [],
                     },
                     {
                         "icon": <GiCardboardBoxClosed />,
-                        "text": "Extra Pages"
+                        "text": "Extra Pages",
+                        "route": "extra-pages",
+                        "subOptions": [],
                     },
                     {
                         "icon": <BiSolidLayout />,
-                        "text": "Layout"
+                        "text": "Layout",
+                        "route": "layout",
                     }
                     ]}
                 />
@@ -80,15 +120,20 @@ function SideBar() {
                     heading={"settings"}
                     options={[{
                         "icon": <MdContactSupport />,
-                        "text": "Supports"
+                        "text": "Supports",
+                        "route": "supports",
+                        "subOptions": [],
                     },
                     {
                         "icon": <RiSettings4Fill />,
-                        "text": "Settings"
+                        "text": "Settings",
+                        "route": "settings",
+                        "subOptions": [],
                     },
                     {
                         "icon": <RiLogoutCircleRFill />,
-                        "text": "Log Out"
+                        "text": "Log Out",
+                        "route": "logout",
                     }
                     ]}
                 />
