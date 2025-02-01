@@ -5,7 +5,7 @@ function ProjectSummaryCard({ items }) {
             {
                 items.map((item, i) => {
                     return <div key={i} className="tile-container flex justify-between items-center p-2">
-                        <div className="wrapper flex items-center gap-2">
+                        <div className="flex items-center gap-2">
                             <div className="icon w-8 h-8 rounded-full flex items-center justify-center" style={{ color: `${item.color}`, backgroundColor: `${item.color}30` }}>
                                 {item.icon}
                             </div>
