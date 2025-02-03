@@ -11,7 +11,7 @@ export default {
 
       },
       backgroundImage: {
-        "chat-background": "url('./src/assets/images/background.png')",
+        "chat-background": "url('/images/background.png')",
       }
     },
   },
