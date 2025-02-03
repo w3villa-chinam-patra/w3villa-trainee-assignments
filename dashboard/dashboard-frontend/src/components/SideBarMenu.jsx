@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 
-function SideBarMenu({ heading, options, isSelected, setIsSelected, dropSection }) {
+function SideBarMenu({ heading, options, isSelected, setIsSelected }) {
   const onClickHandler = (event, subOptions) => {
     setIsSelected(event.currentTarget.childNodes[0].childNodes[1].innerText);
     if (subOptions) {
@@ -15,7 +15,7 @@ function SideBarMenu({ heading, options, isSelected, setIsSelected, dropSection 
   }
 
   return (
-    <div className='transition-all duration-500'>
+    <div className='transition-all duration-500 ease-in-out'>
       <div className='uppercase text-sm my-2 font-bold tracking-tighter'>{heading}</div>
       <div className='text-sm font-semibold'>
         {

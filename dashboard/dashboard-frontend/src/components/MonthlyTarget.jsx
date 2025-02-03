@@ -5,13 +5,13 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 function MonthlyTarget() {
 
     return (
-        <div className='bg-white w-full h-full flex flex-col'>
+        <div className='bg-white flex flex-col'>
             <div className='font-bold'>
                 Monthly Target
             </div>
             <div className='w-full flex-1 flex justify-center items-center'>
                 <Doughnut
-                className='max-h-52'
+                    className='max-h-52'
                     data={{
                         labels: ["Pending Projects", "Done Projects", "New Projects"],
                         datasets: [

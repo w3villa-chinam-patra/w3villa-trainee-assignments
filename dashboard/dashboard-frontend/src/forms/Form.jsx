@@ -10,13 +10,13 @@ function Form() {
           </div>
           <div className="form-wrapper border border-neutral-400 rounded-2xl p-2 w-full max-w-2xl">
             <form className='bg-neutral-100 p-6 rounded-2xl' action="">
-              <div className='field-container'>
+              <div className='field-container my-2'>
                 <label className='text-sm' htmlFor="name">Enter Your name</label>
                 <br />
                 <input className='bg-white w-full border border-slate-400 outline-none rounded-md p-1' id='name' type="text" />
               </div>
-              <div className="field-container">
-                <label className='text-sm' htmlFor="message">Enter Your name</label>
+              <div className="field-container my-2">
+                <label className='text-sm' htmlFor="message">Message</label>
                 <br />
                 <textarea className='bg-white w-full border border-slate-400 outline-none rounded-md p-1' name="" id="message"></textarea>
               </div>

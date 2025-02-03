@@ -16,14 +16,27 @@ import { RiLogoutCircleRFill } from "react-icons/ri";
 import { SiGoogleforms } from "react-icons/si";
 import { TbTableFilled } from "react-icons/tb";
 import { FIRST_FORM_ROUTE } from '../routes';
+import { TbLayoutSidebarRightExpandFilled } from "react-icons/tb";
 
 
-
-function SideBar() {
+function SideBar({ sidebarState }) {
     const [isSelected, setIsSelected] = useState("Overview");
+    const [isSidebarOpen, setIsSidebarOpen] = sidebarState;
+    const onClickHandler = () => {
+        const sidebar = document.querySelector(".sidebar");
+        if (isSidebarOpen) {
+            setIsSidebarOpen(false);
+            sidebar.style.left = "-256px";
+        }
+    }
     return (
-        <div className='bg-zinc-900 text-slate-200 overflow-y-auto'>
-            <div className='font-[Raleway] font-bold text-3xl text-yellow-600 m-2 tracking-tight'>Dashboard</div>
+        <div className='sidebar bg-zinc-900 absolute lg:static w-full max-w-3xs -left-64  text-slate-200 overflow-y-auto h-screen transition-all duration-300 ease-in-out'>
+            <div className='font-[Raleway] font-bold text-3xl text-yellow-600 m-2 tracking-tight flex justify-between items-center'>
+                Dashboard
+                <div className='hamburger-close-button text-slate-100 lg:hidden' onClick={onClickHandler}>
+                    <TbLayoutSidebarRightExpandFilled />
+                </div>
+            </div>
             <div className='m-2'>
                 <SideBarMenu
                     isSelected={isSelected}

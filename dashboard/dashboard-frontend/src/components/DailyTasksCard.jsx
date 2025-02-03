@@ -10,7 +10,7 @@ function DailyTasksCard({ title, text, number }) {
                 {title}
             </div>
             <div className='text-xs text-slate-500'>{text}</div>
-            <div className='my-2 flex justify-between'>
+            <div className='my-2 flex justify-between gap-4'>
                 <div className='text-xs flex gap-1 items-center font-bold text-slate-900'>
                     <MdOutlineAccessTime className='text-red-600 text-base -mt-1' />
                     Updated 5 Hours ago

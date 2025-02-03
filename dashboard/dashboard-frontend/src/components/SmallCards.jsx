@@ -7,15 +7,15 @@ import girl from "../assets/girl.png";
 
 function SmallCards({title,text}) {
     return (
-        <div className='bg-white rounded-3xl p-4'>
-            <div className='font-extrabold text-base flex items-center justify-between my-1'>
+        <div className='bg-white rounded-3xl p-4 flex flex-col justify-evenly'>
+            <div className='font-extrabold text-base flex items-start justify-between my-1'>
                 {title}
                 <div className='text-neutral-700 text-xs bg-slate-100 p-2 rounded-full'>
                     <SlOptionsVertical />
                 </div>
             </div>
             <div className='text-xs text-slate-500'>{text}</div>
-            <div className='my-2 flex justify-between'>
+            <div className='my-2 flex justify-between gap-4'>
                 <div className='text-xs flex gap-1 items-center font-bold text-slate-900'>
                     <MdOutlineAccessTime className='text-red-600 text-base -mt-1' />
                     Updated 5 Hours ago

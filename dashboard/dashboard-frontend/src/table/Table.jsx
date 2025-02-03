@@ -4,7 +4,7 @@ import { CiSearch } from "react-icons/ci";
 import PaginationBox from '../components/PaginationBox';
 
 function Table() {
-    const MAX_ROWS_PER_PAGE = 4;
+    const MAX_ROWS_PER_PAGE = 5;
     let numberOfPages = data.length / MAX_ROWS_PER_PAGE;
     const [searchValue, setSearchValue] = useState("");
     const [pagination, setPagination] = useState(1);
@@ -12,12 +12,13 @@ function Table() {
     // sets the searchValue state with the input search value of user.
     const onChangeHandler = (event) => {
         setSearchValue(event.currentTarget.value);
+        setPagination(1);
     }
 
     return (
         <section className='overflow-y-auto px-4 pb-2'>
             <div className="wrapper">
-                <div className="card-container p-4 bg-white rounded-3xl ">
+                <div className="card-container p-3 md:p-4 bg-white rounded-3xl ">
                     <div className='search-box bg-slate-200 my-4 rounded-3xl px-4 py-2 gap-2 flex items-center'>
                         <CiSearch className="text-3xl" />
                         <input type="text" className="w-full outline-none" placeholder="Search Projects..." onChange={onChangeHandler} />
@@ -25,10 +26,10 @@ function Table() {
                     <div className="table-container p-2 border border-slate-400 rounded-3xl">
                         <table className='w-full table-auto'>
                             <thead>
-                                <tr className='bg-amber-200 overflow-hidden'>
-                                    <th className='text-xl p-4 max-w-20 first:rounded-tl-2xl'>Project ID</th>
-                                    <th className='text-xl p-4'>Project Name</th>
-                                    <th className='text-xl p-4 last:rounded-tr-2xl'>Status</th>
+                                <tr className='bg-amber-200 overflow-hidden md:text-xl'>
+                                    <th className='p-4 max-w-20 first:rounded-tl-2xl'>Project ID</th>
+                                    <th className='p-4'>Project Name</th>
+                                    <th className='p-4 last:rounded-tr-2xl'>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -36,11 +37,10 @@ function Table() {
                                     (() => {
                                         const filteredData = data.filter((obj) => obj.projectName.toLowerCase().includes(searchValue.toLowerCase())) //search feature
 
-                                        // no project awailable case
+                                        // no project available case
                                         if (filteredData.length === 0) {
                                             numberOfPages = 1;
                                             return <tr className='border-t border-slate-300 bg-neutral-100'>
-                                                {console.log("no row")}
                                                 <td className='p-4 text-center text-neutral-600 first:rounded-b-2xl' colSpan={3}>No Projects Found !</td>
                                             </tr>
                                         }
@@ -51,10 +51,10 @@ function Table() {
                                             const lastRowIndex = pagination * MAX_ROWS_PER_PAGE;
                                             if (firstRowIndex - 1 <= i && lastRowIndex > i) {
                                                 return <tr key={i} className={`border-t border-slate-300 ${i % 2 ? "bg-neutral-200" : "bg-neutral-100"}`}>
-                                                    <td className={`p-2 text-center text-neutral-900 font-semibold ${lastRowIndex - 1 === i ? "first:rounded-bl-2xl" : ""}`}>{row.projectId}</td>
+                                                    <td className={`p-2 text-center text-neutral-900 font-semibold ${lastRowIndex - 1 === i || filteredData.length - 1 === i ? "first:rounded-bl-2xl" : ""}`}>{row.projectId}</td>
                                                     <td className='p-2 text-center text-gray-800'>{row.projectName}</td>
-                                                    <td className={`p-2 ${lastRowIndex - 1 === i ? "last:rounded-br-2xl" : ""}`} >
-                                                        <div className='w-fit m-auto py-1 px-4 rounded-sm text-gray-950' style={{
+                                                    <td className={`p-2 ${lastRowIndex - 1 === i || filteredData.length - 1 === i ? "last:rounded-br-2xl" : ""}`} >
+                                                        <div className='w-fit m-auto py-1 px-1 md:px-4 rounded-sm text-gray-950 text-center text-xs md:text-base' style={{
                                                             backgroundColor: `${(() => {
                                                                 if (row.status === "In Progress")
                                                                     return "#f7813188"
