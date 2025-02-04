@@ -30,14 +30,14 @@ function SideBar({ sidebarState }) {
         }
     }
     return (
-        <div className='sidebar bg-zinc-900 absolute lg:static w-full max-w-3xs -left-64  text-slate-200 overflow-y-auto h-screen transition-all duration-300 ease-in-out'>
-            <div className='font-[Raleway] font-bold text-3xl text-yellow-600 m-2 tracking-tight flex justify-between items-center'>
+        <div className='sidebar bg-zinc-900 absolute lg:static w-full max-w-3xs -left-64  text-slate-200 flex flex-col h-screen transition-all duration-300 ease-in-out'>
+            <div className=' logo-container font-[Raleway] font-bold text-4xl text-yellow-600 my-4 tracking-tight flex justify-between items-center'>
                 Dashboard
                 <div className='hamburger-close-button text-slate-100 lg:hidden' onClick={onClickHandler}>
                     <TbLayoutSidebarRightExpandFilled />
                 </div>
             </div>
-            <div className='m-2'>
+            <div className='sidebar-options-container p-2 flex-1 overflow-y-auto'>
                 <SideBarMenu
                     isSelected={isSelected}
                     setIsSelected={setIsSelected}
