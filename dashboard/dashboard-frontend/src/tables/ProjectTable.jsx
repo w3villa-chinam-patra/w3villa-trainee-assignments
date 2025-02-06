@@ -131,7 +131,7 @@ function ProjectTable() {
                     <div className="project-table-container p-2 border border-slate-400 rounded-3xl">
                         <table className='w-full table-auto'>
                             <thead>
-                                <tr className='bg-amber-200 overflow-hidden text-sm md:text-xl'>
+                                <tr className='bg-amber-200 overflow-hidden text-sm md:text-xl font-sans text-neutral-800'>
                                     <th className='p-2 py-4 md:p-4 max-w-20 first:rounded-tl-2xl'>Project ID</th>
                                     <th className='p-2 py-4 md:p-4'>Project Name</th>
                                     <th className='p-2 py-4 md:p-4'>Status</th>
