@@ -15,7 +15,7 @@ import { RiSettings4Fill } from "react-icons/ri";
 import { RiLogoutCircleRFill } from "react-icons/ri";
 import { SiGoogleforms } from "react-icons/si";
 import { TbTableFilled } from "react-icons/tb";
-import { FIRST_FORM_ROUTE } from '../routes';
+import { FIRST_FORM_ROUTE, PROJECT_TABLE_ROUTE, USER_TABLE_ROUTE } from '../routes';
 import { TbLayoutSidebarRightExpandFilled } from "react-icons/tb";
 
 
@@ -67,8 +67,21 @@ function SideBar({ sidebarState }) {
                     },
                     {
                         "icon": <TbTableFilled />,
-                        "text": "Table",
-                        "route": "table",
+                        "text": "Tables",
+                        "subOptions": [
+                            {
+                                "icon": <TbTableFilled />,
+                                "text": "Project Table",
+                                "route": PROJECT_TABLE_ROUTE,
+                                "label": "Table"
+                            },
+                            {
+                                "icon": <TbTableFilled />,
+                                "text": "User Table",
+                                "route": USER_TABLE_ROUTE,
+                                "label": "Table"
+                            }
+                        ]
                     },
                     {
                         "icon": <IoCalendar />,

@@ -3,28 +3,14 @@ import { data } from '../data/data';
 import { CiSearch } from "react-icons/ci";
 import PaginationBox from '../components/PaginationBox';
 
-function Table() {
-    const MAX_ROWS_PER_PAGE = 4;
+function ProjectTable() {
+    const MAX_ROWS_PER_PAGE = 6;
     let numberOfPages = data.length / MAX_ROWS_PER_PAGE;
     const [searchValue, setSearchValue] = useState("");
     const [pagination, setPagination] = useState(1);
     const [displayData, setDisplayData] = useState(data);
     const [editedRow, setEditedRow] = useState({ projectId: null, projectName: null, status: null });
     const [newProject, setNewProject] = useState({ projectId: "", projectName: "", status: "" });
-
-    // fetching the data from the API
-    // useEffect(() => {
-    //     const API_URL = "https://jsonplaceholder.typicode.com/users"
-    //     try {
-    //         (async () => {
-    //             const response = await fetch(API_URL);
-    //             const data = await response.json();
-    //             console.log(data);
-    //         })();
-    //     } catch (error) {
-
-    //     }
-    // }, [])
 
     // sets the searchValue state with the input search value of user.
     const onChangeHandler = (event) => {
@@ -107,7 +93,7 @@ function Table() {
                     {/* add project option starts here */}
                     <div className="add-project-wrapper border  border-neutral-400 rounded-2xl p-2 w-full my-4">
                         <div className='bg-neutral-100 p-4 rounded-2xl flex flex-col md:flex-row gap-4 items-center justify-center'>
-                            <div className='field-container w-full'>
+                            <div className='field-container w-full mt-auto'>
                                 <label className='text-sm' htmlFor="project-id">Enter Project ID</label>
                                 <input
                                     onChange={(event) => onChangeUtilityFunction(event, "projectId")}
@@ -115,7 +101,7 @@ function Table() {
                                     value={newProject.projectId}
                                 />
                             </div>
-                            <div className='field-container w-full'>
+                            <div className='field-container w-full mt-auto'>
                                 <label className='text-sm' htmlFor="project-name">Enter Project Name</label>
                                 <input
                                     onChange={(event) => onChangeUtilityFunction(event, "projectName")}
@@ -123,9 +109,9 @@ function Table() {
                                     value={newProject.projectName}
                                 />
                             </div>
-                            <div className='field-container w-full'>
+                            <div className='field-container w-full mt-auto'>
                                 <label className='text-sm' htmlFor="project-status">Select Project Status</label>
-                                <div className='flex flex-row  rounded-md gap-1 m-2 justify-between'>
+                                <div className='flex flex-row  rounded-md gap-1 m-2 justify-center'>
                                     <div onClick={() => (setNewProject({ ...newProject, status: "In Progress" }))} className={`w-fit py-1 px-1 md:px-4 rounded-sm text-gray-950 text-center text-xs md:text-base bg-[#f7813188] hover:cursor-pointer text-nowrap ${newProject.status === "In Progress" ? "border-3 border-[#f78131]" : ""}`}>
                                         In Progress
                                     </div>
@@ -142,7 +128,7 @@ function Table() {
                     </div>
                     {/* add project option ends here */}
 
-                    <div className="table-container p-2 border border-slate-400 rounded-3xl">
+                    <div className="project-table-container p-2 border border-slate-400 rounded-3xl">
                         <table className='w-full table-auto'>
                             <thead>
                                 <tr className='bg-amber-200 overflow-hidden text-sm md:text-xl'>
@@ -260,4 +246,4 @@ function Table() {
     )
 }
 
-export default Table
+export default ProjectTable

@@ -5,3 +5,6 @@
 .sidebar-options-container::-webkit-scrollbar{
     display: none;
 }
+.user-table-container::-webkit-scrollbar{
+    display: none;
+}
