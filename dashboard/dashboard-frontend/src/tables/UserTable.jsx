@@ -95,6 +95,13 @@ function UserTable() {
     }
     // cancel button handler ends here
 
+    // closeModalHandler starts here
+    const closeModalHandler = (event) => {
+        if (event.currentTarget === event.target) {
+            setAddUserModalIsOpen(!addUserModalIsOpen); 
+        }
+    }
+    // closeModalHandler ends here
 
     return (
         <section className='overflow-y-auto px-2 md:px-4 pb-2'>
@@ -103,16 +110,16 @@ function UserTable() {
 
                     {/* search box and add user button starts here */}
                     <div className="search-box-add-user-button-container my-4 flex flex-col md:flex-row justify-center items-center gap-4">
-                        <div className='search-box bg-neutral-200 my-2 w-full rounded-3xl px-4 py-2 gap-2 flex items-center flex-1'>
+                        <div className='search-box bg-neutral-200 my-2 flex-3/4 w-full rounded-3xl px-4 py-2 gap-2 flex items-center'>
                             <CiSearch className="text-3xl" />
                             <input type="text" className="w-full outline-none" placeholder="Search Projects..." onChange={onChangeHandler} />
                         </div>
-                        <button onClick={() => setAddUserModalIsOpen((prev) => !prev)} className="add-user border-2 rounded-4xl px-2 md:px-4 py-2 border-teal-500 text-teal-700 bg-teal-200 hover:bg-teal-500 hover:text-white cursor-pointer text-nowrap text-sm md:text-base">Add User</button>
+                        <button onClick={() => setAddUserModalIsOpen((prev) => !prev)} className="add-user border-2 rounded-4xl flex-1/4 px-6 py-2 border-teal-500 text-teal-700 bg-teal-200 hover:bg-teal-500 hover:text-white cursor-pointer text-nowrap text-sm md:text-base">Add User</button>
                     </div>
                     {/* search box and add user button ends here */}
 
                     {/* add user option modal starts here */}
-                    <div className={`${addUserModalIsOpen ? "block" : "hidden"} absolute z-10 add-user-option-modal-container left-0 top-0 flex justify-center items-center backdrop-blur-xs w-screen h-screen`}>
+                    <div onClick={closeModalHandler} className={`${addUserModalIsOpen ? "block" : "hidden"} absolute z-10 add-user-option-modal-container left-0 top-0 flex justify-center items-center backdrop-blur-xs w-screen h-screen`}>
                         <div className=" add-project-wrapper border border-neutral-400 rounded-2xl mx-2 p-2 bg-white">
                             <div className='bg-neutral-100 p-4 rounded-2xl flex flex-col gap-4 items-center justify-center'>
 

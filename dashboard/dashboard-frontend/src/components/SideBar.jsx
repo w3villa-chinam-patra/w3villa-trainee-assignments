@@ -30,7 +30,7 @@ function SideBar({ sidebarState }) {
         }
     }
     return (
-        <div className='sidebar z-20 bg-zinc-900 absolute lg:static w-full max-w-3xs -left-64  text-slate-200 flex flex-col h-screen transition-all duration-300 ease-in-out'>
+        <div className='sidebar z-10 bg-zinc-900 absolute lg:static w-full max-w-3xs -left-64  text-slate-200 flex flex-col h-screen transition-all duration-300 ease-in-out'>
             <div className=' logo-container font-[Raleway] font-bold text-4xl text-yellow-600 mx-2 my-4 tracking-tight flex justify-between items-center'>
                 Dashboard
                 <div className='hamburger-close-button text-slate-100 lg:hidden' onClick={onClickHandler}>
