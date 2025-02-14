@@ -4,34 +4,50 @@ import 'swiper/css/pagination';
 import "./HeroSectionStyle.css";
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import PosterSlide from './PosterSlide';
+import { useEffect, useState } from 'react';
 
 function HeroSection() {
+    const [popularMovies, setPopularMovies] = useState([]);
+    useEffect(() => {
+        const options = {
+            method: 'GET',
+            headers: {
+                accept: 'application/json',
+                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhNDkwODQwNWU1YmE0ZDkxZWY4ZDVmMGJhNjdlYzBlYiIsIm5iZiI6MTczOTUxNDU5OS45NjcsInN1YiI6IjY3YWVlMmU3ODBmNzZkNjFlYjhlNjExYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qAwS8WFJ95sg0-v6S_WUkqlqx0l5czPqEX2No6rc6oM'
+            }
+        };
+
+        fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', options)
+            .then(res => res.json())
+            .then(res => { setPopularMovies(res.results) })
+            .catch(err => console.error(err));
+    }, [])
     return (
-        <div className='carousel-container absolute inset-4 rounded-2xl overflow-hidden border border-neutral-700'>
+        <div className='hero-section-carousel-container absolute inset-4 rounded-2xl overflow-hidden border border-neutral-700'>
             <Swiper
-                loop={true} // Enables infinite looping
+                loop={popularMovies?.length > 1}
                 autoplay={{
-                    delay: 3000, // Auto-slide every 3 seconds
-                    disableOnInteraction: false, // Keeps autoplay active after user interaction
+                    delay: 2500,
+                    disableOnInteraction: false,
                 }}
-                navigation={true} // Enables navigation arrows
-                pagination={{
-                    dynamicBullets: true,
-                }}
+                navigation={true}
                 modules={[Navigation, Autoplay, Pagination]}
                 slidesPerView={1}
-                onMouseEnter={(swiper) => swiper.autoplay.stop()} // Pause on hover
-                onMouseLeave={(swiper) => swiper.autoplay.start()} // Resume on mouse leave
+                onMouseEnter={(swiper) => swiper.autoplay.stop()}
+                onMouseLeave={(swiper) => swiper.autoplay.start()}
             >
-                <SwiperSlide>
-                    <PosterSlide imgUrl={"https://img4.hulu.com/user/v3/artwork/666cfe45-a021-4476-a003-390c198a5c13?base_image_bucket_name=image_manager&base_image=b7df87e8-07b6-47b5-a03c-d781882d6777&size=1200x630&format=webp"} />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <PosterSlide imgUrl={"https://pbs.twimg.com/media/DtQ-q3YV4AAvLAL.jpg"} />
-                </SwiperSlide>
-                <SwiperSlide>
-                    <PosterSlide imgUrl={"https://i.pinimg.com/736x/8b/0e/c1/8b0ec10270dbda2b15779da9745ea7a3.jpg"} />
-                </SwiperSlide>
+                {
+                    popularMovies.map((movieInfo) => {
+                        return <SwiperSlide key={movieInfo.id}>
+                            <PosterSlide content={{
+                                id: movieInfo.id,
+                                poster: `https://image.tmdb.org/t/p/original${movieInfo.backdrop_path}`,
+                                title: movieInfo.title,
+                                overview: movieInfo.overview,
+                            }} />
+                        </SwiperSlide>
+                    })
+                }
             </Swiper>
         </div >
     )

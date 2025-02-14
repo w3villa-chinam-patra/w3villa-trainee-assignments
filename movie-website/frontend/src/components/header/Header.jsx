@@ -4,18 +4,18 @@ import { BsBell } from "react-icons/bs";
 function Header() {
     return (
         <div className='header-container bg-inherit rounded-2xl flex gap-4'>
-            <div className="filter bg-neutral-800 py-2 px-6 rounded-full flex gap-2 items-center">
+            <div className="filter bg-neutral-800 py-2 px-6 rounded-full flex gap-2 items-center border border-neutral-700">
                 All
                 <RiArrowDropDownLine className="text-2xl" />
             </div>
-            <div className="search-bar flex gap-2 items-center bg-neutral-800 px-6 py-2 rounded-full flex-1">
+            <div className="search-bar flex gap-2 items-center bg-neutral-800 px-6 py-2 rounded-full flex-1 border border-neutral-700">
                 <input type="text" placeholder="Search" className="w-full outline-none" />
                 <CiSearch className="text-xl" />
             </div>
-            <div className="notification-icon-container bg-neutral-800 flex items-center justify-center w-12 h-12 rounded-full">
+            <div className="notification-icon-container bg-neutral-800 flex items-center justify-center w-12 h-12 rounded-full border border-neutral-700">
                 <BsBell className="text-xl" />
             </div>
-            <div className="user-info-icon bg-neutral-800 rounded-full flex gap-2 pe-6 items-center">
+            <div className="user-info-icon bg-neutral-800 rounded-full flex gap-2 pe-6 items-center border border-neutral-700">
                 <div className="avatar-container bg-neutral-700 w-12 h-12 rounded-full overflow-hidden">
                     <img src="/assets/avatar.png" alt="user-avatar" className="w-full" />
                 </div>

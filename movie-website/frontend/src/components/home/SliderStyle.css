@@ -1,0 +1,14 @@
+.slider-container .swiper {
+    width: 100%;
+}
+
+.slider-container .swiper-slide {
+    background-position: center;
+    background-size: cover;
+    width: 320px;
+}
+
+.slider-container .swiper-slide img {
+    display: block;
+    width: 100%;
+}

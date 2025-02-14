@@ -8,7 +8,7 @@ import { IoSettingsOutline } from "react-icons/io5";
 
 function Sidebar() {
     return (
-        <div className='sidebar-container bg-neutral-800 h-full rounded-2xl p-6'>
+        <div className='sidebar-container bg-neutral-800 h-full rounded-2xl p-6 border border-neutral-700'>
             <div className="logo-container flex gap-2 items-center">
                 <img src="/assets/logo.png" alt="logo" className='w-8' />
                 <div className="app-name text-2xl">

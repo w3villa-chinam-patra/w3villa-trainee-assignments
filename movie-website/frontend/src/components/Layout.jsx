@@ -6,7 +6,7 @@ import { Outlet } from 'react-router-dom'
 function Layout() {
     return (
         // app layout starts here
-        <div className="app-layout-container h-screen grid grid-cols-[300px_1fr] bg-neutral-900 text-neutral-300 font-poppins">
+        <div className="app-layout-container h-screen grid grid-cols-[300px_1fr] bg-neutral-950 text-neutral-300 font-poppins">
 
             {/* sidebar section starts here */}
             <section className="sidebar-section p-4">
