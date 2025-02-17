@@ -49,7 +49,7 @@ function Slider({ movieList }) {
             >
                 {
                     slideDetails?.map((slideDetail) => <SwiperSlide key={slideDetail.id}>
-                        <img className='rounded-2xl' src={`https://image.tmdb.org/t/p/w342${slideDetail.poster_path}`} />
+                        <img className='rounded-2xl' src={`https://image.tmdb.org/t/p/w300${slideDetail.poster_path}`} />
                     </SwiperSlide>)
                 }
             </Swiper>

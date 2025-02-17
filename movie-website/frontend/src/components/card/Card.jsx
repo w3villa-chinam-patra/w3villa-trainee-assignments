@@ -3,7 +3,7 @@ import React from 'react'
 function Card({ content }) {
     return (
         <div className='transition-all duration-200 flex flex-col rounded-2xl cursor-pointer hover:scale-105 p-3'>
-            <div className="image-container relative w-full h-80 rounded-2xl overflow-hidden border border-neutral-700">
+            <div className="image-container relative w-full h-72 rounded-2xl overflow-hidden border border-neutral-700">
                 <img src={content.poster} alt="movie-poster" className='w-full h-full object-cover' />
                 <div className="overlay absolute inset-0 bg-linear-to-b from-transparent to-black/50"></div>
             </div>

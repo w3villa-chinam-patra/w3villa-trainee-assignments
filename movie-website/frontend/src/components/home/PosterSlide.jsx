@@ -19,7 +19,7 @@ function PosterSlide({ content }) {
             .catch(err => console.error(err));
     }, [])
     return (
-        <div className='poster-card w-full h-full text-white'>
+        <div className='poster-card relative w-full h-full text-white'>
             <img src={content.poster} alt="movie-poster" />
             <div className="overlay absolute inset-0 bg-gradient-to-tr from-black/90 to-transparent flex flex-col gap-4 p-8 justify-between items-start">
                 <div className="tag text-sm px-4 py-2 backdrop-blur-3xl rounded-full">
@@ -34,7 +34,7 @@ function PosterSlide({ content }) {
                             )
                         }
                     </div>
-                    <h1 className='text-3xl font-black'>{content.title}</h1>
+                    <h1 className='text-4xl tracking-wider font-black'>{content.title}</h1>
                     <div className='max-w-xl text-sm'>
                         {content.overview}
                     </div>
