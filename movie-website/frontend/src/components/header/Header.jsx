@@ -1,29 +1,149 @@
 import { RiArrowDropDownLine } from "react-icons/ri";
 import { CiSearch } from "react-icons/ci";
 import { BsBell } from "react-icons/bs";
-function Header() {
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { EXPLORE_ROUTE, LOGIN_ROUTE, MOVIE_DETAILS_ROUTE, REGISTER_ROUTE } from "../../routes";
+import { useEffect, useRef, useState } from "react";
+import { auth } from "../../service/firebase";
+import toast from "react-hot-toast";
+import { setUser } from "../../app/features/user/userSlice";
+import { setSearch } from "../../app/features/search/searchSlice";
+import { useGetGenresQuery, useGetSearchResultsQuery } from "../../app/features/movies/moviesApi";
+import { setFilter } from "../../app/features/filter/filterSlice";
+import { FaHamburger } from "react-icons/fa";
+function Header({ setIsHamburgerOpen }) {
+    const user = useSelector((store) => store.user);
+    const [isUserOptionOpen, setIsUserOptionOpen] = useState(false)
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const location = useLocation();
+    const searchInputText = useSelector((state) => state.search)
+    const { data } = useGetSearchResultsQuery(searchInputText)
+    const searchBoxRef = useRef()
+    const { data: genresData } = useGetGenresQuery();
+    const selectedGenre = useSelector((state) => state.filter)
+    const filterOptionsRef = useRef()
+
+
+    const logoutHandler = async () => {
+        try {
+            await auth.signOut()
+            toast.success("Logged out successfully");
+            dispatch(setUser(null));
+            navigate("/");
+        } catch (error) {
+            toast.error(error.message.split("Firebase: "));
+        }
+    }
+
+    // debouncing
+    const searchHandler = () => {
+        let timerId;
+        return (event) => {
+            clearTimeout(timerId);
+            timerId = setTimeout(() => ((event) => {
+                dispatch(setSearch(event.target.value));
+            })(event), 500)
+        }
+    }
+
+    // logic to close the search recommendations popup when user click anywhere else starts here
+    useEffect(() => {
+        const eventHandler = () => {
+            dispatch(setSearch(""));
+            searchBoxRef.current.value = ""
+        }
+        window.addEventListener('click', eventHandler)
+
+        return () => {
+            window.removeEventListener('click', eventHandler)
+        }
+    }, [])
+    // logic to close the search recommendations popup when user click anywhere else ends here
+
+    // filter login start here
+    const filterSelectHandler = (event, genre) => {
+        event.stopPropagation();
+        dispatch(setFilter(genre));
+        filterOptionsRef.current.style.display = "none"
+    }
+
+    const toggleFilterOptions = () => {
+        if (filterOptionsRef.current.style.display === "none" || filterOptionsRef.current.style.display === "") {
+            filterOptionsRef.current.style.display = "block"
+        } else {
+            filterOptionsRef.current.style.display = "none"
+        }
+    }
+
+    // filter login end here
+
     return (
-        <div className='header-container bg-inherit rounded-2xl flex gap-4'>
-            <div className="filter bg-neutral-800 py-2 px-6 rounded-full flex gap-2 items-center border border-neutral-700">
-                All
+        <div className='header-container bg-inherit rounded-2xl w-full flex flex-wrap justify-end gap-1 md:gap-2 lg:gap-4 items-center my-2 md:my-0'>
+            <div onClick={() => setIsHamburgerOpen(prev => !prev)} className="hamburger sm:hidden mx-2 text-xl cursor-pointer"><FaHamburger /></div>
+            <div onClick={toggleFilterOptions} className={`filter relative bg-neutral-800 text-sm md:text-base py-1 md:py-2 px-1 md:px-2 lg:px-6 rounded-full flex md:gap-2 items-center border border-neutral-700 cursor-pointer hover:bg-neutral-600 ${location.pathname === EXPLORE_ROUTE ? "block" : "hidden"}`}>
+                <div className="genre-name">{selectedGenre.name}</div>
                 <RiArrowDropDownLine className="text-2xl" />
+                <div ref={filterOptionsRef} className="options absolute hidden top-10 md:top-12 max-h-80 overflow-y-auto bg-neutral-800 z-10 left-0 rounded-xl border border-neutral-700">
+                    {
+                        [
+                            <div onClick={(event) => filterSelectHandler(event, { name: "All", id: undefined })} key={crypto.randomUUID()} className={`option p-1 md:p-2 hover:bg-neutral-700 ${selectedGenre.name === "All" ? "bg-neutral-700" : ""} `}>{"All"}</div>,
+                            ...(genresData?.genres || []).map((genre) =>
+                                <div onClick={(event) => filterSelectHandler(event, genre)} key={genre.id} className={`option p-1 md:p-2 hover:bg-neutral-700 ${selectedGenre.name === genre.name ? "bg-neutral-700" : ""}`}>{genre.name}</div>
+                            )
+                        ]
+                    }
+                </div>
             </div>
-            <div className="search-bar flex gap-2 items-center bg-neutral-800 px-6 py-2 rounded-full flex-1 border border-neutral-700">
-                <input type="text" placeholder="Search" className="w-full outline-none" />
+            <div onClick={(event) => event.stopPropagation()} className="search-bar z-20 relative flex gap-2 items-center bg-neutral-800 text-sm md:text-base px-3 md:px-6 py-1 md:py-2 rounded-full flex-1 border border-neutral-700">
+                <input ref={searchBoxRef} onChange={searchHandler()} type="text" placeholder="Search" className="w-full outline-none min-w-32" />
                 <CiSearch className="text-xl" />
-            </div>
-            <div className="notification-icon-container bg-neutral-800 flex items-center justify-center w-12 h-12 rounded-full border border-neutral-700">
-                <BsBell className="text-xl" />
-            </div>
-            <div className="user-info-icon bg-neutral-800 rounded-full flex gap-2 pe-6 items-center border border-neutral-700">
-                <div className="avatar-container bg-neutral-700 w-12 h-12 rounded-full overflow-hidden">
-                    <img src="/assets/avatar.png" alt="user-avatar" className="w-full" />
+                <div className={`search-recommendations flex flex-col max-h-80 overflow-y-auto absolute top-8 md:top-12 left-0 right-0 py-2 rounded-xl bg-neutral-800 border border-neutral-700 ${(location.pathname === EXPLORE_ROUTE) || (searchInputText === "") ? "hidden" : "block"}`}>
+                    {
+                        (() => {
+                            const searchResults = data?.results?.map((movieDetails) =>
+                                movieDetails.poster_path &&
+                                <Link to={`${MOVIE_DETAILS_ROUTE}/${movieDetails.id}`} key={movieDetails.id} className="px-2 md:px-6 py-1 md:py-2 hover:bg-neutral-700">
+                                    <div onClick={() => { dispatch(setSearch("")); searchBoxRef.current.value = "" }} className="recommendation-option flex gap-2 md:gap-4 items-center">
+                                        <img src={`https://image.tmdb.org/t/p/w92${movieDetails.poster_path}`} alt="movie-poster" className="h-10" />
+                                        {movieDetails.title}
+                                    </div>
+                                </Link>
+                            )
+                            if (searchResults?.length === 0)
+                                return <div className="py-1 text-center text-neutral-500">No result found</div>
+                            else
+                                return searchResults
+                        })()
+                    }
                 </div>
-                <div className="user-info">
-                    <div className="name text-sm">Dibyadyuti</div>
-                    <div className="username text-xs text-neutral-400">@cdpatra</div>
-                </div>
             </div>
+            <div className="notification-icon-container bg-neutral-800 flex items-center justify-center w-7 md:w-11 h-7 md:h-10 rounded-full border border-neutral-700 cursor-pointer hover:bg-neutral-600">
+                <BsBell className="text-sm md:text-xl" />
+            </div>
+            {
+                user
+                    ?
+                    <div onClick={() => setIsUserOptionOpen(!isUserOptionOpen)} className="user-info-icon relative bg-neutral-800 rounded-full flex gap-1 md:gap-2 pe-3 md:pe-6 items-center border border-neutral-700 cursor-pointer">
+                        <div className="avatar-container bg-neutral-700 w-7 h-7 md:w-12 md:h-12 rounded-full overflow-hidden">
+                            <img src="/assets/avatar.png" alt="user-avatar" className="w-full" />
+                        </div>
+
+                        <div className="user-info">
+                            <div className="name text-xs md:text-sm overflow-ellipsis text-nowrap">{user.firstName}</div>
+                            <div className="username text-[10px] md:text-xs text-neutral-400">@{user.username}</div>
+                        </div>
+                        <div onClick={logoutHandler} className={`user-options-dropdown absolute flex justify-center items-center text-sm bg-red-900 -bottom-16 z-10 w-full rounded-2xl p-4 border border-red-900 hover:bg-red-800 ${isUserOptionOpen ? "" : "hidden"}`}>
+                            <div>Logout</div>
+                        </div>
+                    </div>
+                    :
+                    <div className="login-register-button flex gap-2 items-center">
+                        <Link to={LOGIN_ROUTE}><button className="bg-neutral-800 rounded-full border border-neutral-700 px-4 py-2 cursor-pointer hover:bg-neutral-600">Login</button></Link>
+                        <Link to={REGISTER_ROUTE}><button className="bg-neutral-800 rounded-full border border-neutral-700 px-4 py-2 cursor-pointer hover:bg-neutral-600">Register</button></Link>
+                    </div>
+            }
         </div>
     )
 }

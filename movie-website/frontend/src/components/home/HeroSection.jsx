@@ -5,27 +5,14 @@ import "./HeroSectionStyle.css";
 import { Pagination, Navigation, Autoplay } from 'swiper/modules';
 import PosterSlide from './PosterSlide';
 import { useEffect, useState } from 'react';
+import { useGetMoviesQuery } from '../../app/features/movies/moviesApi';
 
 function HeroSection() {
-    const [popularMovies, setPopularMovies] = useState([]);
-    useEffect(() => {
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhNDkwODQwNWU1YmE0ZDkxZWY4ZDVmMGJhNjdlYzBlYiIsIm5iZiI6MTczOTUxNDU5OS45NjcsInN1YiI6IjY3YWVlMmU3ODBmNzZkNjFlYjhlNjExYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qAwS8WFJ95sg0-v6S_WUkqlqx0l5czPqEX2No6rc6oM'
-            }
-        };
-
-        fetch('https://api.themoviedb.org/3/movie/popular?language=en-US&page=1', options)
-            .then(res => res.json())
-            .then(res => { setPopularMovies(res.results) })
-            .catch(err => console.error(err));
-    }, [])
+    const { data, isLoading, isError } = useGetMoviesQuery("popular");
     return (
-        <div className='hero-section-carousel-container absolute inset-4 rounded-2xl overflow-hidden border border-neutral-700'>
+        <div className='hero-section-carousel-container absolute inset-0 rounded-2xl overflow-hidden border border-neutral-700'>
             <Swiper
-                loop={popularMovies?.length > 1}
+                loop={data?.results?.length > 1}
                 autoplay={{
                     delay: 2500,
                     disableOnInteraction: false,
@@ -37,7 +24,7 @@ function HeroSection() {
                 onMouseLeave={(swiper) => swiper.autoplay.start()}
             >
                 {
-                    popularMovies.map((movieInfo) => {
+                    data?.results.map((movieInfo) => {
                         return <SwiperSlide key={movieInfo.id}>
                             <PosterSlide content={{
                                 id: movieInfo.id,

@@ -20,34 +20,34 @@ function PosterSlide({ content }) {
     }, [])
     return (
         <div className='poster-card relative w-full h-full text-white'>
-            <img src={content.poster} alt="movie-poster" />
+            <img loading="lazy" src={content.poster} alt="movie-poster" />
             <div className="overlay absolute inset-0 bg-gradient-to-tr from-black/90 to-transparent flex flex-col gap-4 p-8 justify-between items-start">
-                <div className="tag text-sm px-4 py-2 backdrop-blur-3xl rounded-full">
+                <div className="tag text-xs md:text-sm px-2 md:px-4 py-1 md:py-2 backdrop-blur-3xl rounded-full">
                     🔥 Now Popular
                 </div>
                 <div className="movie-info text-start flex flex-col gap-4">
                     <div className="category flex gap-4">
                         {
                             movieDetails && movieDetails.genres.map((genres) => {
-                                return <div key={genres.id} className='px-2 py-1 text-sm backdrop-blur-3xl rounded-full'>{genres.name}</div>
+                                return <div key={genres.id} className='px-1 md:px-2 md:py-1 text-xs md:text-sm backdrop-blur-3xl rounded-full'>{genres.name}</div>
                             }
                             )
                         }
                     </div>
-                    <h1 className='text-4xl tracking-wider font-black'>{content.title}</h1>
-                    <div className='max-w-xl text-sm'>
+                    <h1 className='text-2xl md:text-4xl tracking-wider font-black'>{content.title}</h1>
+                    <div className='max-w-lg md:max-w-xl text-xs md:text-sm'>
                         {content.overview}
                     </div>
                     <div className="buttons flex gap-2">
-                        <button className="watch-now-button flex items-center gap-2 bg-white hover:bg-white/80 cursor-pointer text-neutral-950 px-4 py-2 rounded-full">
+                        <button className="watch-now-button flex text-sm md:text-base items-center gap-2 bg-white hover:bg-white/80 cursor-pointer text-neutral-950 px-2 md:px-4 py-1 md:py-2 rounded-full">
                             <FaPlay />
                             <div>Watch Now</div>
                         </button>
-                        <button className="download-button flex items-center gap-2 bg-neutral-950 border border-neutral-700 hover:bg-gray-800 cursor-pointer  px-4 py-2 rounded-full">
+                        <button className="download-button flex text-sm md:text-base  items-center gap-2 bg-neutral-950 border border-neutral-700 hover:bg-gray-800 cursor-pointer px-2 md:px-4 py-1 md:py-2 rounded-full">
                             <RiDownloadLine />
                             <div>Download</div>
                         </button>
-                        <button className="download-button flex items-center gap-2 bg-neutral-950 border border-neutral-700 hover:bg-gray-800 cursor-pointer  px-4 py-2 rounded-full">
+                        <button className="download-button flex items-center gap-2 bg-neutral-950 border border-neutral-700 hover:bg-gray-800 cursor-pointer px-2 md:px-4 py-1 md:py-2 rounded-full">
                             <HiOutlineDotsHorizontal />
                         </button>
                     </div>

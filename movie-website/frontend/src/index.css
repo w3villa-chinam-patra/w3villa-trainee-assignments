@@ -5,6 +5,25 @@
   --font-poppins: "Poppins", sans-serif;
 }
 
+.home-container::-webkit-scrollbar,
+.movie-details-section::-webkit-scrollbar,
 .outlet-container::-webkit-scrollbar {
   display: none;
+}
+
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgb(45, 43, 43);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(128, 128, 128, 0.493);
+  border-radius: 1rem;
+  margin-inline: 10px;
+  border: 3.5px solid transparent;
+  background-clip: content-box;
+  transition: opacity 2s ease;
 }

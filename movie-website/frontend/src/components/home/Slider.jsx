@@ -8,27 +8,14 @@ import './SliderStyle.css';
 
 import { EffectCoverflow, Autoplay } from 'swiper/modules';
 import { useEffect, useState } from 'react';
+import { useGetMoviesQuery } from '../../app/features/movies/moviesApi';
 
 function Slider({ movieList }) {
-    const [slideDetails, setSlideDetails] = useState(null);
-    useEffect(() => {
-        const options = {
-            method: 'GET',
-            headers: {
-                accept: 'application/json',
-                Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJhNDkwODQwNWU1YmE0ZDkxZWY4ZDVmMGJhNjdlYzBlYiIsIm5iZiI6MTczOTUxNDU5OS45NjcsInN1YiI6IjY3YWVlMmU3ODBmNzZkNjFlYjhlNjExYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.qAwS8WFJ95sg0-v6S_WUkqlqx0l5czPqEX2No6rc6oM'
-            }
-        };
-
-        fetch(`https://api.themoviedb.org/3/movie/${movieList}?language=en-US&page=1`, options)
-            .then(res => res.json())
-            .then(res => setSlideDetails(res.results))
-            .catch(err => console.error(err));
-    }, [])
+    const { data, isLoading, isError } = useGetMoviesQuery(movieList)
     return (
-        <div className="slider-container">
+        <div className="slider-container mx-auto">
             <Swiper
-                loop={slideDetails?.length > 1} // Enables infinite looping
+                loop={data?.results?.length > 1} // Enables infinite looping
                 autoplay={{
                     delay: 1000, // Auto-slide every 3 seconds
                     disableOnInteraction: false, // Keeps autoplay active after user interaction
@@ -48,8 +35,8 @@ function Slider({ movieList }) {
                 modules={[EffectCoverflow, Autoplay]}
             >
                 {
-                    slideDetails?.map((slideDetail) => <SwiperSlide key={slideDetail.id}>
-                        <img className='rounded-2xl' src={`https://image.tmdb.org/t/p/w300${slideDetail.poster_path}`} />
+                    data?.results?.map((slideDetail) => <SwiperSlide key={slideDetail.id}>
+                        <img loading='lazy' className='rounded-2xl object-cover' src={`https://image.tmdb.org/t/p/w300${slideDetail.poster_path}`} />
                     </SwiperSlide>)
                 }
             </Swiper>
