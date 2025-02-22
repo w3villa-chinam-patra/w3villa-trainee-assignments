@@ -2,9 +2,11 @@ import { GoogleAuthProvider, GithubAuthProvider, signInWithPopup } from 'firebas
 import React from 'react'
 import { auth, db } from '../../service/firebase'
 import { useDispatch } from 'react-redux'
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, getDoc, setDoc } from 'firebase/firestore'
 import toast from 'react-hot-toast'
 import { useNavigate } from 'react-router-dom'
+import { HOME_ROUTE } from '../../routes'
+import { setUser } from '../../app/features/user/userSlice'
 
 function SocialLogin() {
     const dispatch = useDispatch()
@@ -15,16 +17,23 @@ function SocialLogin() {
             console.log(result)
             try {
                 if (result.user) {
-                    await setDoc(doc(db, "Users", result.user.uid), {
-                        email: result.user.email,
-                        firstName: result.user.displayName,
-                        lastName: "",
-                        username: result.user.email.split("@")[0],
-                        favorites: []
-                    })
+                    const docRef = doc(db, "Users", result.user.uid)
+                    const docSnapshot = await getDoc(docRef)
+                    if (docSnapshot.exists()) {
+                        dispatch(setUser({ uid: result.user.uid, email: result.user.email, ...docSnapshot.data() }));
+                    } else {
+                        await setDoc(doc(db, "Users", result.user.uid), {
+                            email: result.user.email,
+                            firstName: result.user.displayName,
+                            lastName: "",
+                            username: result.user.email.split("@")[0],
+                            favorites: []
+                        })
+                    }
+                    
                 }
                 toast.success("Logged In Successfully")
-                navigate("/")
+                navigate(HOME_ROUTE)
             } catch (error) {
                 toast.error(error.message)
             }
@@ -39,16 +48,23 @@ function SocialLogin() {
             console.log(result)
             try {
                 if (result.user) {
-                    await setDoc(doc(db, "Users", result.user.uid), {
-                        email: result.user.email,
-                        firstName: result.user.displayName,
-                        lastName: "",
-                        username: result.user.email.split("@")[0],
-                        favorites: []
-                    })
+                    const docRef = doc(db, "Users", result.user.uid)
+                    const docSnapshot = await getDoc(docRef)
+                    if (docSnapshot.exists()) {
+                        dispatch(setUser({ uid: result.user.uid, email: result.user.email, ...docSnapshot.data() }));
+                    } else {
+                        await setDoc(doc(db, "Users", result.user.uid), {
+                            email: result.user.email,
+                            firstName: result.user.displayName,
+                            lastName: "",
+                            username: result.user.email.split("@")[0],
+                            favorites: []
+                        })
+                    }
+                    
                 }
                 toast.success("Logged In Successfully")
-                navigate("/")
+                navigate(HOME_ROUTE)
             } catch (error) {
                 toast.error(error.message)
             }
