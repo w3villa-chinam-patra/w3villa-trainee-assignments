@@ -78,7 +78,7 @@ function Explore() {
                             review: cardDetail.vote_average,
                             year: cardDetail.release_date
                         }} />)
-                        return [...exploreDisplayData, ...Array.from({ length: 5 }, () => <ShimmerCard key={crypto.randomUUID()} />)]
+                        return [...exploreDisplayData, ...Array.from({ length: window.innerWidth <= 768 ? 1 : 5 }, () => <ShimmerCard key={crypto.randomUUID()} />)]
                     })()
 
 
