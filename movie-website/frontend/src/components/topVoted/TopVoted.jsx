@@ -7,17 +7,18 @@ import { MOVIE_DETAILS_ROUTE } from "../../routes";
 function TopVoted() {
   const vote = useSelector((state) => state.vote);
   const [topVoted, setTopVoted] = useState([]);
-  console.log(vote);
   useEffect(() => {
     if (vote) {
       const data = Object.entries(vote);
-      data.sort((movieDetails) => {
+      data.sort((firstMovieDetail, secondMovieDetail) => {
         return (
-          movieDetails[1].downVotes.length - movieDetails[1].upVotes.length
+          firstMovieDetail[1].downVotes.length -
+          firstMovieDetail[1].upVotes.length -
+          (secondMovieDetail[1].downVotes.length -
+            secondMovieDetail[1].upVotes.length)
         );
       });
       setTopVoted(data);
-      console.log(data);
     }
   }, [vote]);
   return (

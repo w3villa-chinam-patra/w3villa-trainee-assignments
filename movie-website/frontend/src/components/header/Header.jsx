@@ -131,7 +131,7 @@ function Header({ setIsHamburgerOpen ,setIsDark}) {
                     </div>
                 </div>
                 <div className="flex gap-1 md:gap-2 lg:gap-4 items-center w-full lg:w-auto">
-                    <div onClick={themeChanger} className="theme-icon-container bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center w-10 p-2 rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
+                    <div onClick={themeChanger} className="theme-icon-container bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center w-[20%] h-full lg:w-12 rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
                         <MdOutlineLightMode className="md:text-2xl" />
                     </div>
                     {
