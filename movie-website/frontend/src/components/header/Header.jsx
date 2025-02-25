@@ -107,7 +107,7 @@ function Header({ setIsHamburgerOpen ,setIsDark}) {
                         }
                     </div>
                 </div>
-                <div onClick={(event) => event.stopPropagation()} className="search-bar z-20 relative flex gap-2 items-center bg-neutral-300 dark:bg-neutral-800 text-sm md:text-base px-3 md:px-6 py-1 md:py-2 rounded-full flex-1 border border-neutral-400 dark:border-neutral-700">
+                <div onClick={(event) => event.stopPropagation()} className="search-bar z-20 relative flex gap-2 items-center bg-neutral-300 dark:bg-neutral-800 px-3 md:px-6 py-1 md:py-2 rounded-full flex-1 border border-neutral-400 dark:border-neutral-700">
                     <input ref={searchBoxRef} onChange={searchHandler()} type="text" placeholder="Search" className="w-full outline-none min-w-32" />
                     <CiSearch className="text-xl" />
                     <div className={`search-recommendations flex flex-col max-h-80 overflow-y-auto absolute top-8 md:top-12 left-0 right-0 py-2 rounded-xl bg-neutral-800 border border-neutral-700 ${(location.pathname === EXPLORE_ROUTE) || (searchInputText === "") ? "hidden" : "block"}`}>
@@ -131,7 +131,7 @@ function Header({ setIsHamburgerOpen ,setIsDark}) {
                     </div>
                 </div>
                 <div className="flex gap-1 md:gap-2 lg:gap-4 items-center w-full lg:w-auto">
-                    <div onClick={themeChanger} className="theme-icon-container bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center w-[20%] h-full lg:w-12 rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
+                    <div onClick={themeChanger} className="theme-icon-container bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center w-[20%] h-full lg:w-14 rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
                         <MdOutlineLightMode className="md:text-2xl" />
                     </div>
                     {
