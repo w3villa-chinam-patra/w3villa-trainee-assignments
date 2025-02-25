@@ -37,12 +37,12 @@ function Card({ content }) {
         <Link to={`${MOVIE_DETAILS_ROUTE}/${content.id}`} >
             <div className='relative flex flex-col rounded-2xl cursor-pointer p-3  max-w-[250px] mx-auto'>
                 <div className="image-container relative w-full h-72 rounded-2xl overflow-hidden border border-neutral-700">
-                    <div className="overlay absolute inset-0 bg-linear-to-b from-transparent to-black/50">
+                    <div className="overlay absolute inset-0 bg-linear-to-b from-transparent to-black/10 dark:to-black/50">
                         <img loading="lazy" src={content?.poster} alt="movie-poster" className='transition-all duration-600 w-full h-full object-cover hover:scale-105' />
                     </div>
 
                 </div>
-                <div onClick={favoriteHandler} className="favorite-icon absolute  flex justify-center items-center bg-neutral-800/60 border border-neutral-500 text-white text-2xl rounded-full right-0 top-0 p-1.5">
+                <div onClick={favoriteHandler} className="favorite-icon absolute flex justify-center items-center bg-neutral-500/60 darK:bg-neutral-800/60 border border-neutral-500 text-white text-2xl rounded-full right-0 top-0 p-1.5">
                     {
                         user?.favorites.includes(content.id)
                             ?

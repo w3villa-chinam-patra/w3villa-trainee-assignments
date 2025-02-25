@@ -45,7 +45,6 @@ function SocialLogin() {
     const githubLogin = () => {
         const provider = new GithubAuthProvider();
         signInWithPopup(auth, provider).then(async (result) => {
-            console.log(result)
             try {
                 if (result.user) {
                     const docRef = doc(db, "Users", result.user.uid)

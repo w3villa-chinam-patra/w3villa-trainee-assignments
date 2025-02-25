@@ -10,15 +10,14 @@ import { useGetMoviesQuery } from '../../app/features/movies/moviesApi';
 function HeroSection() {
     const { data, isLoading, isError } = useGetMoviesQuery("popular");
     return (
-        <div className='hero-section-carousel-container absolute inset-0 rounded-2xl overflow-hidden border border-neutral-700'>
+        <div className='hero-section-carousel-container absolute inset-0 rounded-2xl overflow-hidden border border-neutral-400 dark:border-neutral-700'>
             <Swiper
                 loop={data?.results?.length > 1}
                 autoplay={{
                     delay: 2500,
                     disableOnInteraction: false,
                 }}
-                navigation={true}
-                modules={[Navigation, Autoplay, Pagination]}
+                modules={[ Autoplay, Pagination]}
                 slidesPerView={1}
                 onMouseEnter={(swiper) => swiper.autoplay.stop()}
                 onMouseLeave={(swiper) => swiper.autoplay.start()}

@@ -21,9 +21,8 @@ function Explore() {
             const scrollTop = exploreSectionRef.current?.parentElement.scrollTop
             const scrollHeight = exploreSectionRef.current?.parentElement.scrollHeight
             if (scrollTop >= scrollHeight - (2 * clientHeight + 50)) {
-                console.log(searchInput.length)
                 if (searchInput.length === 0)
-                    setPage(prev => { console.log(prev + 1); return prev + 1 })
+                    setPage(prev => prev + 1)
             }
         }
         exploreSectionRef.current?.parentElement.addEventListener('scroll', scrollEventHandler)
@@ -44,8 +43,6 @@ function Explore() {
         }
     }, [data])
 
-
-    console.log(useGetSearchResultsQuery(searchInput));
 
     return (
         <section ref={exploreSectionRef} className='card-container grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))]'>

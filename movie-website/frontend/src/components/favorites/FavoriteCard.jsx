@@ -31,7 +31,7 @@ function FavoriteCard({ movieId }) {
             <div className='transition-all relative duration-200 flex flex-col rounded-2xl cursor-pointer p-3 max-w-[250px] mx-auto'>
                 <div className="image-container relative w-full h-72 rounded-2xl overflow-hidden border border-neutral-700">
                     <img src={`https://image.tmdb.org/t/p/w342${data?.poster_path}`} alt="movie-poster" className='w-full h-full object-cover hover:scale-105' />
-                    <div className="overlay absolute inset-0 bg-linear-to-b from-transparent to-black/50"></div>
+                    <div className="overlay absolute inset-0 bg-linear-to-b from-transparent to-black/10 dark:to-black/50"></div>
                 </div>
                 <div onClick={favoriteHandler} className="favorite-icon absolute  flex justify-center items-center bg-neutral-800/60 border border-neutral-500 text-white text-2xl rounded-full right-0 top-0 p-1.5">
                     {

@@ -21,7 +21,7 @@ function PosterSlide({ content }) {
     return (
         <div className='poster-card relative w-full h-full text-white'>
             <img loading="lazy" src={content.poster} alt="movie-poster" />
-            <div className="overlay absolute inset-0 bg-gradient-to-tr from-black/90 to-transparent flex flex-col gap-4 p-8 justify-between items-start">
+            <div className="overlay absolute inset-0 bg-gradient-to-tr from-black/40 dark:from-black/90 to-transparent flex flex-col gap-4 p-8 justify-between items-start">
                 <div className="tag text-xs md:text-sm px-2 md:px-4 py-1 md:py-2 backdrop-blur-3xl rounded-full">
                     🔥 Now Popular
                 </div>

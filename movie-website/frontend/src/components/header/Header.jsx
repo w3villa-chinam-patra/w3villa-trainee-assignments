@@ -12,8 +12,8 @@ import { setSearch } from "../../app/features/search/searchSlice";
 import { useGetGenresQuery, useGetSearchResultsQuery } from "../../app/features/movies/moviesApi";
 import { setFilter } from "../../app/features/filter/filterSlice";
 import { IoIosArrowDown } from "react-icons/io";
-import { MdKeyboardDoubleArrowRight } from "react-icons/md";
-function Header({ setIsHamburgerOpen }) {
+import { MdKeyboardDoubleArrowRight, MdOutlineLightMode } from "react-icons/md";
+function Header({ setIsHamburgerOpen ,setIsDark}) {
     const user = useSelector((store) => store.user);
     const [isUserOptionOpen, setIsUserOptionOpen] = useState(false)
     const navigate = useNavigate();
@@ -80,25 +80,34 @@ function Header({ setIsHamburgerOpen }) {
 
     // filter login end here
 
+    // theme changing logic starts here
+    const themeChanger = () => {
+        setIsDark(prev => {
+            localStorage.setItem("isDark", JSON.stringify(!prev));
+            return !prev
+        })
+    }
+    // theme changing logic ends here
+
     return (
-        <div className="flex items-stretch gap-1">
-            <div onClick={() => setIsHamburgerOpen(prev => !prev)} className="hamburger flex items-center rounded-2xl border border-neutral-700 px-2 sm:hidden text-xl cursor-pointer bg-neutral-800"><MdKeyboardDoubleArrowRight /></div>
+        <div className="flex items-stretch gap-1 ">
+            <div onClick={() => setIsHamburgerOpen(prev => !prev)} className="hamburger flex items-center rounded-2xl border border-neutral-400 dark:border-neutral-700 px-2 sm:hidden text-xl cursor-pointer bg-neutral-300 dark:bg-neutral-800"><MdKeyboardDoubleArrowRight /></div>
             <div className='header-container bg-inherit rounded-2xl w-full flex flex-wrap lg:flex-nowrap justify-center gap-1 md:gap-2 lg:gap-4 items-stretch md:my-0'>
-                <div onClick={toggleFilterOptions} className={`filter relative bg-neutral-800 text-sm md:text-base py-1 md:py-2 px-2 lg:px-6 rounded-full flex md:gap-2 items-center border border-neutral-700 cursor-pointer hover:bg-neutral-600 ${location.pathname === EXPLORE_ROUTE ? "block" : "hidden"}`}>
+                <div onClick={toggleFilterOptions} className={`filter relative bg-neutral-300 dark:bg-neutral-800 text-sm md:text-base py-1 md:py-2 px-2 lg:px-6 rounded-full flex md:gap-2 items-center border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600 ${location.pathname === EXPLORE_ROUTE ? "block" : "hidden"}`}>
                     <div className="genre-name">{selectedGenre.name}</div>
                     <RiArrowDropDownLine className="text-2xl" />
-                    <div ref={filterOptionsRef} className="options absolute hidden top-10 md:top-12 max-h-80 overflow-y-auto bg-neutral-800 z-10 left-0 rounded-xl border border-neutral-700">
+                    <div ref={filterOptionsRef} className="options absolute hidden top-12 md:top-14 max-h-80 overflow-y-auto bg-neutral-300 dark:bg-neutral-800 z-10 left-0 rounded-xl border border-neutral-400 dark:border-neutral-700">
                         {
                             [
-                                <div onClick={(event) => filterSelectHandler(event, { name: "All", id: undefined })} key={crypto.randomUUID()} className={`option p-1 md:p-2 hover:bg-neutral-700 ${selectedGenre.name === "All" ? "bg-neutral-700" : ""} `}>{"All"}</div>,
+                                <div onClick={(event) => filterSelectHandler(event, { name: "All", id: undefined })} key={crypto.randomUUID()} className={`option p-1 md:p-2 hover:bg-neutral-400 dark:hover:bg-neutral-700 ${selectedGenre.name === "All" ? "bg-neutral-300 dark:bg-neutral-700" : ""} `}>{"All"}</div>,
                                 ...(genresData?.genres || []).map((genre) =>
-                                    <div onClick={(event) => filterSelectHandler(event, genre)} key={genre.id} className={`option p-1 md:p-2 hover:bg-neutral-700 ${selectedGenre.name === genre.name ? "bg-neutral-700" : ""}`}>{genre.name}</div>
+                                    <div onClick={(event) => filterSelectHandler(event, genre)} key={genre.id} className={`option p-1 md:p-2 hover:bg-neutral-400 dark:hover:bg-neutral-700 ${selectedGenre.name === genre.name ? "bg-neutral-300 dark:bg-neutral-700" : ""}`}>{genre.name}</div>
                                 )
                             ]
                         }
                     </div>
                 </div>
-                <div onClick={(event) => event.stopPropagation()} className="search-bar z-20 relative flex gap-2 items-center bg-neutral-800 text-sm md:text-base px-3 md:px-6 py-1 md:py-2 rounded-full flex-1 border border-neutral-700">
+                <div onClick={(event) => event.stopPropagation()} className="search-bar z-20 relative flex gap-2 items-center bg-neutral-300 dark:bg-neutral-800 text-sm md:text-base px-3 md:px-6 py-1 md:py-2 rounded-full flex-1 border border-neutral-400 dark:border-neutral-700">
                     <input ref={searchBoxRef} onChange={searchHandler()} type="text" placeholder="Search" className="w-full outline-none min-w-32" />
                     <CiSearch className="text-xl" />
                     <div className={`search-recommendations flex flex-col max-h-80 overflow-y-auto absolute top-8 md:top-12 left-0 right-0 py-2 rounded-xl bg-neutral-800 border border-neutral-700 ${(location.pathname === EXPLORE_ROUTE) || (searchInputText === "") ? "hidden" : "block"}`}>
@@ -122,32 +131,32 @@ function Header({ setIsHamburgerOpen }) {
                     </div>
                 </div>
                 <div className="flex gap-1 md:gap-2 lg:gap-4 items-center w-full lg:w-auto">
-                    <div className="notification-icon-container bg-neutral-800 flex items-center justify-center w-10 md:w-11 h-full rounded-full border border-neutral-700 cursor-pointer hover:bg-neutral-600">
-                        <BsBell className="text-sm md:text-xl" />
+                    <div onClick={themeChanger} className="theme-icon-container bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center w-10 p-2 rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
+                        <MdOutlineLightMode className="md:text-2xl" />
                     </div>
                     {
                         user
                             ?
-                            <div onClick={() => setIsUserOptionOpen(!isUserOptionOpen)} className="user-info-icon relative bg-neutral-800 rounded-full flex justify-between gap-2 pe-3 md:gap-2 items-center border border-neutral-700 cursor-pointer flex-1">
+                            <div onClick={() => setIsUserOptionOpen(!isUserOptionOpen)} className="user-info-icon relative bg-neutral-300 dark:bg-neutral-800 rounded-full flex justify-between gap-2 pe-3 md:gap-2 items-center border border-neutral-400 dark:border-neutral-700 cursor-pointer flex-1">
                                 <div className="info-container flex items-center">
                                     <div className="avatar-container bg-neutral-700 w-7 h-7 md:w-12 md:h-12 rounded-full overflow-hidden">
                                         <img src="/assets/avatar.png" alt="user-avatar" className="w-full" />
                                     </div>
 
                                     <div className="user-info">
-                                        <div className="name text-xs md:text-sm overflow-ellipsis text-nowrap">{user.firstName}</div>
-                                        <div className="username text-[10px] md:text-xs text-neutral-400">@{user.username}</div>
+                                        <div className="name text-xs md:text-sm overflow-ellipsis text-nowrap truncate">{user.firstName}</div>
+                                        <div className="username text-[10px] md:text-xs text-neutral-500 dark:text-neutral-400 truncate">@{user.username}</div>
                                     </div>
-                                    <div onClick={logoutHandler} className={`user-options-dropdown absolute flex justify-center items-center text-sm bg-red-900 -bottom-16 z-10 left-[40%] rounded-2xl p-4 border border-red-900 hover:bg-red-800 ${isUserOptionOpen ? "" : "hidden"}`}>
+                                    <div onClick={logoutHandler} className={`user-options-dropdown absolute flex justify-center items-center text-sm bg-red-500 text-white  dark:bg-red-900 -bottom-16 z-10 left-[40%] rounded-2xl p-4 border border-red-600 dark:border-red-900 hover:bg-red-600 dark:hover:bg-red-800 ${isUserOptionOpen ? "" : "hidden"}`}>
                                         <div>Logout</div>
                                     </div>
                                 </div>
                                 <IoIosArrowDown />
                             </div>
                             :
-                            <div className="login-register-button flex gap-2 items-center">
-                                <Link to={LOGIN_ROUTE}><button className="bg-neutral-800 rounded-full border border-neutral-700 px-4 py-2 cursor-pointer hover:bg-neutral-600">Login</button></Link>
-                                <Link to={REGISTER_ROUTE}><button className="bg-neutral-800 rounded-full border border-neutral-700 px-4 py-2 cursor-pointer hover:bg-neutral-600">Register</button></Link>
+                            <div className="w-full login-register-button grid grid-cols-2 gap-1 md:gap-2 items-center text-sm lg:text-base">
+                                <Link to={LOGIN_ROUTE}><button className="w-full bg-neutral-300 dark:bg-neutral-800 rounded-full border border-neutral-400 dark:border-neutral-700 px-4 py-2 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">Login</button></Link>
+                                <Link to={REGISTER_ROUTE}><button className="w-full bg-neutral-300 dark:bg-neutral-800 rounded-full border border-neutral-400 dark:border-neutral-700 px-4 py-2 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">Register</button></Link>
                             </div>
                     }
                 </div>
