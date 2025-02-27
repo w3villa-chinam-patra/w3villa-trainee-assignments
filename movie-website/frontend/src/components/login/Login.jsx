@@ -26,7 +26,6 @@ function Login() {
         setIsLoading(true);
         try {
             const data = await signInWithEmailAndPassword(auth, loginDetails.email, loginDetails.password)
-            console.log(data);
             toast.success("Logged In Successfully");
             navigate("/");
         } catch (error) {

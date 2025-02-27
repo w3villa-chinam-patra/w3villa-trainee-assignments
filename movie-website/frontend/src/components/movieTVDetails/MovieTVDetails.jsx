@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import {
   useGetCreditsQuery,
-  useGetMovieDetailsQuery,
+  useGetDetailsQuery,
   useGetRecommendationsQuery,
   useGetRelatedImagesQuery,
-  useGetSimilarMoviesQuery,
-} from "../../app/features/movies/moviesApi";
+  useGetSimilarQuery,
+} from "../../app/features/movies/tmdbApi";
 import { useParams } from "react-router-dom";
 import {
   arrayRemove,
@@ -24,19 +24,32 @@ import { setUser } from "../../app/features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import CastCard from "./CastCard";
-import MovieDetailsSlider from "./MovieDetailsSlider";
+import MovieDetailsSlider from "./MovieTVDetailsSlider";
 import { HiThumbDown, HiThumbUp } from "react-icons/hi";
 import { setVote } from "../../app/features/vote/voteSlice";
 
 function MovieDetails() {
   const params = useParams();
-  const { data, isLoading, isError } = useGetMovieDetailsQuery(params.movieId);
-  const { data: creditsData } = useGetCreditsQuery(params.movieId);
-  const { data: recommendationData } = useGetRecommendationsQuery(
-    params.movieId
-  );
-  const { data: relatedImagesData } = useGetRelatedImagesQuery(params.movieId);
-  const { data: similarMovieData } = useGetSimilarMoviesQuery(params.movieId);
+  const { data, isLoading, isError } = useGetDetailsQuery({
+    appCategory: params.category,
+    id: params.id,
+  });
+  const { data: creditsData } = useGetCreditsQuery({
+    appCategory: params.category,
+    id: params.id,
+  });
+  const { data: recommendationData } = useGetRecommendationsQuery({
+    appCategory: params.category,
+    id: params.id,
+  });
+  const { data: relatedImagesData } = useGetRelatedImagesQuery({
+    appCategory: params.category,
+    id: params.id,
+  });
+  const { data: similarData } = useGetSimilarQuery({
+    appCategory: params.category,
+    id: params.id,
+  });
   const movieDetailsRef = useRef();
   const user = useSelector((state) => state.user);
   const vote = useSelector((state) => state.vote);
@@ -45,32 +58,44 @@ function MovieDetails() {
   // it will make the MovieDetails component to scroll to the top when the component re-renders
   useEffect(() => {
     if (movieDetailsRef.current) movieDetailsRef.current.scrollTop = 0;
-  }, [params.movieId]);
+  }, [params.id]);
 
   const favoriteHandler = async () => {
     const docRef = doc(db, "Users", user.uid);
     try {
-      if (user.favorites.includes(Number(params.movieId))) {
+      if (
+        user.favorites.filter(({ id, category }) => Number(params.id) === id)
+          .length
+      ) {
         dispatch(
           setUser({
             ...user,
             favorites: user.favorites.filter(
-              (movieId) => Number(params.movieId) !== movieId
+              ({ id, category }) => Number(params.id) !== id
             ),
           })
         );
         await updateDoc(docRef, {
-          favorites: arrayRemove(Number(params.movieId)),
+          favorites: arrayRemove({
+            id: Number(params.id),
+            category: params.category,
+          }),
         });
       } else {
         dispatch(
           setUser({
             ...user,
-            favorites: [...user.favorites, Number(params.movieId)],
+            favorites: [
+              ...user.favorites,
+              { id: Number(params.id), category: params.category },
+            ],
           })
         );
         await updateDoc(docRef, {
-          favorites: arrayUnion(Number(params.movieId)),
+          favorites: arrayUnion({
+            id: Number(params.id),
+            category: params.category,
+          }),
         });
       }
     } catch (error) {
@@ -81,16 +106,16 @@ function MovieDetails() {
   // storing the upvote of the user in the firestore movie collection
   const upvoteMovie = async () => {
     if (!data) return;
-    const movieRef = doc(db, "Movies", params.movieId);
+    const movieTvRef = doc(db, "MoviesAndTV", params.id);
     try {
-      let movieSnapshot = await getDoc(movieRef);
-      if (movieSnapshot.exists()) {
-        await updateDoc(movieRef, {
+      let movieTvSnapshot = await getDoc(movieTvRef);
+      if (movieTvSnapshot.exists()) {
+        await updateDoc(movieTvRef, {
           upVotes: arrayUnion(user.uid),
           downVotes: arrayRemove(user.uid),
         });
       } else {
-        await setDoc(movieRef, {
+        await setDoc(movieTvRef, {
           posterPath: data.poster_path,
           title: data.title,
           upVotes: arrayUnion(user.uid),
@@ -98,13 +123,13 @@ function MovieDetails() {
         });
       }
       toast.success("Thanks for your vote");
-      const moviesCollection = collection(db, "Movies");
-      const moviesSnapshot = await getDocs(moviesCollection);
-      const movieList = moviesSnapshot.docs.reduce((acc, doc) => {
+      const movieTvCollection = collection(db, "MoviesAndTV");
+      const moviesTvSnapshot = await getDocs(movieTvCollection);
+      const movieTvList = moviesTvSnapshot.docs.reduce((acc, doc) => {
         acc[doc.id] = doc.data();
         return acc;
       }, {});
-      dispatch(setVote(movieList));
+      dispatch(setVote(movieTvList));
     } catch (error) {
       toast.error(error.message);
     }
@@ -112,16 +137,16 @@ function MovieDetails() {
   // storing the downvote of the user in the firestore movie collection
   const downvoteMovie = async () => {
     if (!data) return;
-    const movieRef = doc(db, "Movies", params.movieId);
+    const movieTvRef = doc(db, "MoviesAndTV", params.id);
     try {
-      let movieSnapshot = await getDoc(movieRef);
-      if (movieSnapshot.exists()) {
-        await updateDoc(movieRef, {
+      let movieTvSnapshot = await getDoc(movieTvRef);
+      if (movieTvSnapshot.exists()) {
+        await updateDoc(movieTvRef, {
           upVotes: arrayRemove(user.uid),
           downVotes: arrayUnion(user.uid),
         });
       } else {
-        await setDoc(movieRef, {
+        await setDoc(movieTvRef, {
           posterPath: data.poster_path,
           title: data.title,
           upVotes: arrayRemove(user.uid),
@@ -129,13 +154,13 @@ function MovieDetails() {
         });
       }
       toast.success("Thanks for your vote");
-      const moviesCollection = collection(db, "Movies");
-      const moviesSnapshot = await getDocs(moviesCollection);
-      const movieList = moviesSnapshot.docs.reduce((acc, doc) => {
+      const movieTvCollection = collection(db, "MoviesAndTV");
+      const moviesTvSnapshot = await getDocs(movieTvCollection);
+      const movieTvList = moviesTvSnapshot.docs.reduce((acc, doc) => {
         acc[doc.id] = doc.data();
         return acc;
       }, {});
-      dispatch(setVote(movieList));
+      dispatch(setVote(movieTvList));
     } catch (error) {
       toast.error(error.message);
     }
@@ -173,7 +198,7 @@ function MovieDetails() {
                         className={`cursor-pointer ${
                           vote &&
                           Object.keys(vote).length &&
-                          vote[params.movieId]?.downVotes?.includes(user?.uid)
+                          vote[params.id]?.downVotes?.includes(user?.uid)
                             ? "border-2 border-red-300 bg-red-500/60"
                             : "bg-neutral-500/50 hover:bg-neutral-500 "
                         }   rounded-full p-1`}
@@ -181,7 +206,7 @@ function MovieDetails() {
                       <div className="downvote-count text-xs my-1 text-neutral-300">
                         {(vote &&
                           Object.keys(vote).length &&
-                          vote[params.movieId]?.downVotes?.length) ||
+                          vote[params.id]?.downVotes?.length) ||
                           0}
                       </div>
                     </div>
@@ -191,7 +216,7 @@ function MovieDetails() {
                         className={`cursor-pointer ${
                           vote &&
                           Object.keys(vote).length &&
-                          vote[params.movieId]?.upVotes?.includes(user?.uid)
+                          vote[params.id]?.upVotes?.includes(user?.uid)
                             ? "border-2 border-green-300 bg-green-500/60"
                             : "bg-neutral-500/50 hover:bg-neutral-500 "
                         }   rounded-full p-1`}
@@ -199,7 +224,7 @@ function MovieDetails() {
                       <div className="downvote-count text-xs my-1 text-neutral-300">
                         {(vote &&
                           Object.keys(vote).length &&
-                          vote[params.movieId]?.upVotes?.length) ||
+                          vote[params.id]?.upVotes?.length) ||
                           0}
                       </div>
                     </div>
@@ -253,7 +278,10 @@ function MovieDetails() {
                 onClick={favoriteHandler}
                 className="favorite-icon absolute cursor-pointer flex justify-center items-center bg-neutral-800/60 border border-neutral-500 text-white text-4xl rounded-full -right-4 -top-4 p-2"
               >
-                {user?.favorites.includes(Number(params.movieId)) ? (
+                {user?.favorites.filter(
+                  ({ id, category }) =>
+                    Number(params.id) === id && params.category === category
+                ).length ? (
                   <MdFavorite className="text-emerald-200" />
                 ) : (
                   <MdFavoriteBorder className="" />
@@ -340,16 +368,22 @@ function MovieDetails() {
               </div>
             </div>
           </div>
-          <div className="recommended my-10 text-neutral-900 dark:text-white">
-            <h2 className="text-xl lg:text-2xl font-semibold my-4">
-              Recommendations
-            </h2>
-            <MovieDetailsSlider slideData={recommendationData} />
-          </div>
-          <div className="similar my-10 text-neutral-900 dark:text-white">
-            <h2 className="text-xl lg:text-2xl font-semibold my-4">Similar</h2>
-            <MovieDetailsSlider slideData={similarMovieData} />
-          </div>
+          {recommendationData?.results.length !== 0 && (
+            <div className="recommended my-10 text-neutral-900 dark:text-white">
+              <h2 className="text-xl lg:text-2xl font-semibold my-4">
+                Recommendations
+              </h2>
+              <MovieDetailsSlider slideData={recommendationData} />
+            </div>
+          )}
+          {similarData?.results.length !== 0 && (
+            <div className="similar my-10 text-neutral-900 dark:text-white">
+              <h2 className="text-xl lg:text-2xl font-semibold my-4">
+                Similar
+              </h2>
+              <MovieDetailsSlider slideData={similarData} />
+            </div>
+          )}
         </div>
       </div>
     </section>

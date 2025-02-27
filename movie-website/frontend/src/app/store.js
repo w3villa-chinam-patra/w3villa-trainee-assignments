@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userReducer from "./features/user/userSlice";
 import searchReducer from "./features/search/searchSlice";
-import { moviesApi } from "./features/movies/moviesApi";
+import { tmdbApi } from "./features/movies/tmdbApi";
 import filterReducer from "./features/filter/filterSlice";
 import voteReducer from "./features/vote/voteSlice";
+import appCategoryReducer from "./features/appCategory/appCategorySlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,8 +12,9 @@ export const store = configureStore({
     search: searchReducer,
     filter: filterReducer,
     vote: voteReducer,
-    [moviesApi.reducerPath]: moviesApi.reducer,
+    appCategory: appCategoryReducer,
+    [tmdbApi.reducerPath]: tmdbApi.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(moviesApi.middleware),
+    getDefaultMiddleware().concat(tmdbApi.middleware),
 });

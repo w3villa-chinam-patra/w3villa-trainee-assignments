@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "./sidebar/Sidebar";
 import Header from "./header/Header";
 import { Outlet } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { auth, db } from "../service/firebase";
 import { setUser } from "../app/features/user/userSlice";
 import {
@@ -10,7 +10,6 @@ import {
   doc,
   getDoc,
   getDocs,
-  snapshotEqual,
 } from "firebase/firestore";
 import { setVote } from "../app/features/vote/voteSlice";
 
@@ -28,13 +27,13 @@ function Layout() {
         dispatch(
           setUser({ uid: user.uid, email: user.email, ...docSnapshot.data() })
         );
-        const moviesCollection = collection(db, "Movies");
-        const moviesSnapshot = await getDocs(moviesCollection);
-        const movieList = moviesSnapshot.docs.reduce((acc, doc) => {
+        const moviesTvCollection = collection(db, "MoviesAndTV");
+        const moviesTvSnapshot = await getDocs(moviesTvCollection);
+        const movieTvList = moviesTvSnapshot.docs.reduce((acc, doc) => {
           acc[doc.id] = doc.data();
           return acc;
         }, {});
-        dispatch(setVote(movieList));
+        dispatch(setVote(movieTvList));
       }
     });
   }, []);
@@ -57,7 +56,7 @@ function Layout() {
       {/* header and content section starts here */}
       <div className="header-content-container grid grid-rows-[auto_1fr] h-screen">
         {/* header section starts here */}
-        <section className="header-section p-2 md:p-4 ">
+        <section className="header-section p-2 md:p-4">
           <Header
             setIsHamburgerOpen={setIsHamburgerOpen}
             isDark={isDark}

@@ -40,11 +40,11 @@ function Sidebar({ isHamburgerOpen, setIsHamburgerOpen }) {
   };
   return (
     <div
-      className={`sidebar-container ${
-        isHamburgerOpen ? "" : "hidden"
-      } absolute z-30 sm:block sm:static bg-neutral-300 dark:bg-neutral-800 h-full sm:rounded-2xl p-4 md:p-6 border dark:border-neutral-700 border-neutral-400`}
+      className={`sidebar-container transition-all duration-300 ease-in-out ${
+        isHamburgerOpen ? "left-2" : "-left-full"
+      } absolute z-30 sm:block sm:static bg-neutral-300 dark:bg-neutral-800 sm:h-full inset-y-2 rounded-2xl p-4 md:p-6 border dark:border-neutral-700 border-neutral-400`}
     >
-      <div className="flex justify-end sm:hidden">
+      <div className="flex justify-end mb-2">
         <div onClick={() => setIsHamburgerOpen(false)}>
           <RxCross2 />
         </div>
@@ -68,7 +68,7 @@ function Sidebar({ isHamburgerOpen, setIsHamburgerOpen }) {
           options={
             [
               // { icon: <FiUser />, title: "Profile", to: PROFILE_ROUTE },
-              // { icon: <IoSettingsOutline />, title: "Settings", to: SETTINGS_ROUTE },
+              { icon: <IoSettingsOutline />, title: "Settings", to: SETTINGS_ROUTE },
             ]
           }
         />
