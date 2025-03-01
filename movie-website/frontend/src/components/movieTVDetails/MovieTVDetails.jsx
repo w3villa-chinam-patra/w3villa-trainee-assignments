@@ -27,20 +27,26 @@ import CastCard from "./CastCard";
 import MovieDetailsSlider from "./MovieTVDetailsSlider";
 import { HiThumbDown, HiThumbUp } from "react-icons/hi";
 import { setVote } from "../../app/features/vote/voteSlice";
+import { MOVIE_CATEGORY, TV_CATEGORY } from "../../appCategory";
+import { useTranslation } from "react-i18next";
 
 function MovieDetails() {
+  const { t, i18n } = useTranslation();
   const params = useParams();
   const { data, isLoading, isError } = useGetDetailsQuery({
     appCategory: params.category,
     id: params.id,
+    language: i18n.language,
   });
   const { data: creditsData } = useGetCreditsQuery({
     appCategory: params.category,
     id: params.id,
+    language: i18n.language,
   });
   const { data: recommendationData } = useGetRecommendationsQuery({
     appCategory: params.category,
     id: params.id,
+    language: i18n.language,
   });
   const { data: relatedImagesData } = useGetRelatedImagesQuery({
     appCategory: params.category,
@@ -49,6 +55,7 @@ function MovieDetails() {
   const { data: similarData } = useGetSimilarQuery({
     appCategory: params.category,
     id: params.id,
+    language: i18n.language,
   });
   const movieDetailsRef = useRef();
   const user = useSelector((state) => state.user);
@@ -115,12 +122,23 @@ function MovieDetails() {
           downVotes: arrayRemove(user.uid),
         });
       } else {
-        await setDoc(movieTvRef, {
-          posterPath: data.poster_path,
-          title: data.title,
-          upVotes: arrayUnion(user.uid),
-          downVotes: arrayRemove(user.uid),
-        });
+        if (params.category === MOVIE_CATEGORY) {
+          await setDoc(movieTvRef, {
+            posterPath: data.poster_path,
+            title: data.title,
+            upVotes: arrayUnion(user.uid),
+            downVotes: arrayRemove(user.uid),
+            category: MOVIE_CATEGORY,
+          });
+        } else if (params.category === TV_CATEGORY) {
+          await setDoc(movieTvRef, {
+            posterPath: data.poster_path,
+            name: data.name,
+            upVotes: arrayUnion(user.uid),
+            downVotes: arrayRemove(user.uid),
+            category: TV_CATEGORY,
+          });
+        }
       }
       toast.success("Thanks for your vote");
       const movieTvCollection = collection(db, "MoviesAndTV");
@@ -146,12 +164,23 @@ function MovieDetails() {
           downVotes: arrayUnion(user.uid),
         });
       } else {
-        await setDoc(movieTvRef, {
-          posterPath: data.poster_path,
-          title: data.title,
-          upVotes: arrayRemove(user.uid),
-          downVotes: arrayUnion(user.uid),
-        });
+        if (params.category === MOVIE_CATEGORY) {
+          await setDoc(movieTvRef, {
+            posterPath: data.poster_path,
+            title: data.title,
+            upVotes: arrayUnion(user.uid),
+            downVotes: arrayRemove(user.uid),
+            category: MOVIE_CATEGORY,
+          });
+        } else if (params.category === TV_CATEGORY) {
+          await setDoc(movieTvRef, {
+            posterPath: data.poster_path,
+            name: data.name,
+            upVotes: arrayUnion(user.uid),
+            downVotes: arrayRemove(user.uid),
+            category: TV_CATEGORY,
+          });
+        }
       }
       toast.success("Thanks for your vote");
       const movieTvCollection = collection(db, "MoviesAndTV");
@@ -165,6 +194,16 @@ function MovieDetails() {
       toast.error(error.message);
     }
   };
+
+  // const fetchingImage = async (url) => {
+  //   try {
+  //     const response = await fetch(url);
+  //     const data = await response.json();
+  //     console.log(data);
+  //   } catch (error) {
+  //     console.log(error.message);
+  //   }
+  // };
 
   return (
     <section
@@ -188,7 +227,9 @@ function MovieDetails() {
             <div className="movie-title flex flex-col items-start w-full">
               <div className="title-vote-container flex justify-between gap-2 w-full items-center">
                 <div className="title text-4xl lg:text-5xl font-black">
-                  {data?.title}
+                  {params.category === MOVIE_CATEGORY
+                    ? data?.title
+                    : data?.name}
                 </div>
                 {user ? (
                   <div className="voting-system flex text-4xl gap-2">
@@ -239,14 +280,20 @@ function MovieDetails() {
               <div className="release-date-and-review-container flex gap-2 justify-between flex-wrap w-full items-center">
                 <div className="release-date flex flex-wrap gap-1 text-sm lg:text-base my-2">
                   <div className="font-medium text-nowrap bg-white/50 px-2 py-1 rounded-full backdrop-blur-3xl">
-                    Release Date:
+                    {t("releaseDate")}:
                   </div>
                   <div className="text-nowrap bg-white/30 px-2 py-1 rounded-full backdrop-blur-3xl">
                     {new Intl.DateTimeFormat("en-US", {
                       year: "numeric",
                       month: "long",
                       day: "2-digit",
-                    }).format(new Date(data?.release_date || "2024/12/1"))}
+                    }).format(
+                      new Date(
+                        data?.release_date ||
+                          data?.first_air_date ||
+                          "2024/12/1"
+                      )
+                    )}
                   </div>
                 </div>
                 <div className="review flex items-center gap-1 md:gap-2 px-2 lg:px-4 lg:py-1 bg-white/30 rounded-full backdrop-blur-3xl">
@@ -271,8 +318,8 @@ function MovieDetails() {
               <img
                 loading="lazy"
                 src={`https://image.tmdb.org/t/p/w500${data?.poster_path}`}
-                alt="movie-poster"
-                className="w-full rounded-2xl border border-neutral-600 shadow-2xl shadow-neutral-500"
+                alt=""
+                className="w-full rounded-2xl bg-neutral-700 border border-neutral-600 shadow-2xl shadow-neutral-500"
               />
               <div
                 onClick={favoriteHandler}
@@ -291,7 +338,7 @@ function MovieDetails() {
             <div className="overview-genre-container md:w-[60%] px-2 text-neutral-900 dark:text-white md:text-white">
               <div className="overview text-base lg:text-lg">
                 <h2 className="text-xl lg:text-3xl font-semibold my-4">
-                  Overview
+                  {t("overview")}
                 </h2>
                 {data?.overview}
               </div>
@@ -310,35 +357,37 @@ function MovieDetails() {
             </div>
           </div>
           <div className="movie-info dark:text-white p-2 lg:p-4 h-full text-neutral-900">
-            <div className="production-companies my-10">
-              <h2 className="text-xl lg:text-2xl font-semibold my-4">
-                Production Companies
-              </h2>
-              <div className="logo-container flex flex-wrap gap-2 lg:gap-6 my-2 lg:my-4">
-                {data?.production_companies.map((company) => {
-                  return (
-                    company.logo_path && (
-                      <div
-                        key={company.id}
-                        className="img-container flex justify-center items-center p-1 bg-white w-14 h-14 rounded-full overflow-hidden"
-                      >
-                        <img
-                          loading="lazy"
-                          src={`https://image.tmdb.org/t/p/w92${company.logo_path}`}
-                          alt="logo"
-                          className="h-full object-contain"
-                        />
-                      </div>
-                    )
-                  );
-                })}
+            {data?.production_companies.length !== 0 && (
+              <div className="production-companies my-10">
+                <h2 className="text-xl lg:text-2xl font-semibold my-4">
+                  {t("productionCompanies")}
+                </h2>
+                <div className="logo-container flex flex-wrap gap-2 lg:gap-6 my-2 lg:my-4">
+                  {data?.production_companies.map((company) => {
+                    return (
+                      company.logo_path && (
+                        <div
+                          key={company.id}
+                          className="img-container flex justify-center items-center p-1 bg-white w-14 h-14 rounded-full overflow-hidden"
+                        >
+                          <img
+                            loading="lazy"
+                            src={`https://image.tmdb.org/t/p/w92${company.logo_path}`}
+                            alt="logo"
+                            className="h-full object-contain"
+                          />
+                        </div>
+                      )
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
             <div className="credits my-10">
               <h2 className="text-xl lg:text-2xl font-semibold my-4">
-                Credits
+                {t("credits")}
               </h2>
-              <div className="case-card-container overflow-x-auto flex gap-4 md:ga-6 lg:gap-8">
+              <div className="cast-card-container overflow-x-auto flex gap-4 md:ga-6 lg:gap-8">
                 {creditsData?.cast?.map((castDetail, i) => (
                   <CastCard key={i} castDetail={castDetail} />
                 ))}
@@ -346,7 +395,7 @@ function MovieDetails() {
             </div>
             <div className="related-images-container">
               <h2 className="text-xl lg:text-2xl font-semibold my-4">
-                Related Images
+                {t("relatedImages")}
               </h2>
               <div className="backdrop-container flex flex-wrap w-full justify-center items-center">
                 {relatedImagesData?.backdrops?.slice(0, 10).map((backdrop) => (
@@ -371,7 +420,7 @@ function MovieDetails() {
           {recommendationData?.results.length !== 0 && (
             <div className="recommended my-10 text-neutral-900 dark:text-white">
               <h2 className="text-xl lg:text-2xl font-semibold my-4">
-                Recommendations
+                {t("recommendations")}
               </h2>
               <MovieDetailsSlider slideData={recommendationData} />
             </div>
@@ -379,7 +428,7 @@ function MovieDetails() {
           {similarData?.results.length !== 0 && (
             <div className="similar my-10 text-neutral-900 dark:text-white">
               <h2 className="text-xl lg:text-2xl font-semibold my-4">
-                Similar
+                {t("similar")}
               </h2>
               <MovieDetailsSlider slideData={similarData} />
             </div>

@@ -6,6 +6,7 @@ import { db } from "../../service/firebase";
 import { setUser } from "../../app/features/user/userSlice";
 import { Link } from "react-router-dom";
 import { MOVIE_DETAILS_ROUTE } from "../../routes";
+import { FaImage } from "react-icons/fa";
 
 function Card({ content }) {
   const appCategory = useSelector((state) => state.appCategory);
@@ -86,7 +87,7 @@ function Card({ content }) {
           </div>
           <div className="movie-title-and-year me-1 text-end flex flex-col items-end gap-1 ps-2">
             <div className="movie-title text-sm font-semibold">
-              {content?.title}
+              {content?.title }
             </div>
             <div className="movie-year text-xs text-neutral-400">
               {content?.year?.split("-")[0]}

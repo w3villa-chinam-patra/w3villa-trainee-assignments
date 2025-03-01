@@ -56,7 +56,7 @@ function Layout() {
       {/* header and content section starts here */}
       <div className="header-content-container grid grid-rows-[auto_1fr] h-screen">
         {/* header section starts here */}
-        <section className="header-section p-2 md:p-4">
+        <section className="header-section p-2 md:p-4 w-full">
           <Header
             setIsHamburgerOpen={setIsHamburgerOpen}
             isDark={isDark}

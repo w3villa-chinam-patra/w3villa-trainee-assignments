@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { MOVIE_CATEGORY } from "../../../appCategor";
+import { MOVIE_CATEGORY } from "../../../appCategory";
 
 const initialState = MOVIE_CATEGORY
 

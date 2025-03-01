@@ -7,15 +7,17 @@ import "swiper/css/autoplay";
 import "./SliderStyle.css";
 
 import { EffectCoverflow, Autoplay } from "swiper/modules";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useTransition } from "react";
 import {
   useGetMoviesQuery,
   useGetTVQuery,
 } from "../../app/features/movies/tmdbApi";
-import { MOVIE_CATEGORY, TV_CATEGORY } from "../../appCategor";
+import { MOVIE_CATEGORY, TV_CATEGORY } from "../../appCategory";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 function Slider({ list }) {
+  const { i18n } = useTranslation();
   const appCategory = useSelector((state) => state.appCategory);
   let { data, isLoading, isError } = {
     data: null,
@@ -23,10 +25,18 @@ function Slider({ list }) {
     isError: null,
   };
   if (appCategory === MOVIE_CATEGORY) {
-    const { data: movieData, isLoading, isError } = useGetMoviesQuery(list);
+    const {
+      data: movieData,
+      isLoading,
+      isError,
+    } = useGetMoviesQuery({ movieList: list, language: i18n.language });
     data = movieData;
   } else if (appCategory === TV_CATEGORY) {
-    const { data: tvData, isLoading, isError } = useGetTVQuery(list);
+    const {
+      data: tvData,
+      isLoading,
+      isError,
+    } = useGetTVQuery({ tvList: list, language: i18n.language });
     data = tvData;
   }
   return (

@@ -26,7 +26,7 @@ function TopVoted() {
       {topVoted.map((movieDetails, i) => {
         return (
           <Link
-            to={`${MOVIE_DETAILS_ROUTE}/${movieDetails[0]}`}
+            to={`${MOVIE_DETAILS_ROUTE}/${movieDetails[1].category}/${movieDetails[0]}`}
             key={movieDetails[0]}
             className="w-full flex gap-2 relative justify-between items-start border border-neutral-400 dark:border-neutral-700 bg-neutral-200 dark:bg-neutral-800 p-2 rounded-2xl"
           >
@@ -40,7 +40,7 @@ function TopVoted() {
                 className="rounded-2xl"
               />
               <div className="title md:text-xl font-semibold">
-                {movieDetails[1].title}
+                {movieDetails[1].title || movieDetails[1].name}
               </div>
             </div>
             <div className="voting-system flex text-4xl gap-2">

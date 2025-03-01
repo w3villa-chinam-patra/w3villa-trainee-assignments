@@ -22,8 +22,10 @@ import {
 import { setFilter } from "../../app/features/filter/filterSlice";
 import { IoIosArrowDown } from "react-icons/io";
 import { MdKeyboardDoubleArrowRight, MdOutlineLightMode } from "react-icons/md";
-import { MOVIE_CATEGORY } from "../../appCategor";
+import { MOVIE_CATEGORY } from "../../appCategory";
+import { useTranslation } from "react-i18next";
 function Header({ setIsHamburgerOpen, setIsDark }) {
+  const { t, i18n } = useTranslation();
   const appCategory = useSelector((state) => state.appCategory);
   const user = useSelector((store) => store.user);
   const [isUserOptionOpen, setIsUserOptionOpen] = useState(false);
@@ -33,7 +35,10 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
   const searchInputText = useSelector((state) => state.search);
   const { data } = useGetSearchResultsQuery({ appCategory, searchInputText });
   const searchBoxRef = useRef();
-  const { data: genresData } = useGetGenresQuery(appCategory);
+  const { data: genresData } = useGetGenresQuery({
+    appCategory,
+    language: i18n.language,
+  });
   const selectedGenre = useSelector((state) => state.filter);
   const filterOptionsRef = useRef();
 
@@ -107,22 +112,14 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
   // theme changing logic ends here
 
   return (
-    <div className="flex items-stretch gap-1 ">
+    <div className="flex items-stretch gap-1 w-full">
       <div
         onClick={() => setIsHamburgerOpen((prev) => !prev)}
         className="hamburger flex items-center rounded-2xl border border-neutral-400 dark:border-neutral-700 px-2 sm:hidden text-xl cursor-pointer bg-neutral-300 dark:bg-neutral-800"
       >
         <MdKeyboardDoubleArrowRight />
       </div>
-      <div className="header-container bg-inherit rounded-2xl w-full flex flex-wrap lg:flex-nowrap justify-center gap-1 md:gap-2 lg:gap-4 items-stretch md:my-0">
-        {/* <div className="app-category-container flex gap-2 text-nowrap">
-          <button className="w-full bg-neutral-300 dark:bg-neutral-800 rounded-full border border-neutral-400 dark:border-neutral-700 p-2 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
-            Movies
-          </button>
-          <button className="w-full bg-neutral-300 dark:bg-neutral-800 rounded-full border border-neutral-400 dark:border-neutral-700 p-2 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
-            TV Shows
-          </button>
-        </div> */}
+      <div className="header-container bg-inherit rounded-2xl w-full flex flex-wrap lg:flex-nowrap  gap-1 md:gap-2 lg:gap-4 items-stretch md:my-0">
         <div
           onClick={toggleFilterOptions}
           className={`filter relative bg-neutral-300 dark:bg-neutral-800 text-sm md:text-base py-1 md:py-2 px-2 lg:px-6 rounded-full flex md:gap-2 items-center border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600 ${
@@ -133,7 +130,7 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
           <RiArrowDropDownLine className="text-2xl" />
           <div
             ref={filterOptionsRef}
-            className="options absolute hidden top-12 md:top-14 max-h-80 overflow-y-auto bg-neutral-300 dark:bg-neutral-800 z-10 left-0 rounded-xl border border-neutral-400 dark:border-neutral-700"
+            className="options absolute hidden top-12 md:top-18 max-h-80 overflow-y-auto bg-neutral-300 dark:bg-neutral-800 z-10 left-0 rounded-xl border border-neutral-400 dark:border-neutral-700"
           >
             {[
               <div
@@ -167,18 +164,18 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
         </div>
         <div
           onClick={(event) => event.stopPropagation()}
-          className="search-bar z-20 relative flex gap-2 items-center bg-neutral-300 dark:bg-neutral-800 px-3 md:px-6 py-2 rounded-full flex-1 border border-neutral-400 dark:border-neutral-700"
+          className="search-bar z-20 relative flex gap-2 items-center bg-neutral-300 flex-1 dark:bg-neutral-800 px-3 md:px-6 py-2 rounded-full fle border border-neutral-400 dark:border-neutral-700"
         >
           <input
             ref={searchBoxRef}
             onChange={searchHandler()}
             type="text"
-            placeholder="Search"
+            placeholder={t("search")}
             className="w-full px-2 outline-none min-w-32"
           />
           <CiSearch className="text-xl" />
           <div
-            className={`search-recommendations flex flex-col max-h-80 overflow-y-auto absolute top-8 md:top-12 left-0 right-0 py-2 rounded-xl bg-neutral-800 border border-neutral-700 ${
+            className={`search-recommendations flex flex-col max-h-80 overflow-y-auto absolute top-12 md:top-16 left-0 right-0 py-2 rounded-xl bg-neutral-800 border border-neutral-700 ${
               location.pathname === EXPLORE_ROUTE || searchInputText === ""
                 ? "hidden"
                 : "block"
@@ -189,7 +186,7 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
                 (movieDetails) =>
                   movieDetails.poster_path && (
                     <Link
-                      to={`${MOVIE_DETAILS_ROUTE}/${movieDetails.id}`}
+                      to={`${MOVIE_DETAILS_ROUTE}/${appCategory}/${movieDetails.id}`}
                       key={movieDetails.id}
                       className="px-2 md:px-6 py-1 md:py-2 hover:bg-neutral-700"
                     >
@@ -198,6 +195,7 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
                           dispatch(setSearch(""));
                           searchBoxRef.current.value = "";
                         }}
+                        search-bar
                         className="recommendation-option flex gap-2 md:gap-4 items-center"
                       >
                         <img
@@ -220,71 +218,75 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
             })()}
           </div>
         </div>
-        <div className="flex gap-1 md:gap-2 lg:gap-4 items-center w-full lg:w-auto">
-          <div className="movies-or-tv-and-language-change text-xs flex flex-col gap-1 w-[20%]">
+        <div className="flex gap-1 md:gap-2 items-center w-full lg:w-auto">
+          <div className="movies-or-tv-and-language-change text-xs sm:text-nowrap flex flex-col gap-1 min-w-max basis-2/7">
             <Link
               to={SETTINGS_ROUTE}
               className="category px-2 py-1 text-nowrap bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600"
             >
-              {appCategory === MOVIE_CATEGORY ? "Movies" : "TV"}
+              {appCategory === MOVIE_CATEGORY ? t("movie") : t("tv")}
             </Link>
             <Link
               to={SETTINGS_ROUTE}
               className="language px-2 py-1 bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600"
             >
-              en-
+              {t("langSymbol")}
             </Link>
           </div>
           <div
             onClick={themeChanger}
-            className="theme-icon-container bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center w-[20%] h-full lg:w-18 rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600"
+            className="theme-icon-container p-2 bg-neutral-300 dark:bg-neutral-800 flex items-center justify-center h-full  basis-1/7  rounded-full border border-neutral-400 dark:border-neutral-700 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600"
           >
-            <MdOutlineLightMode className="text-2xl" />
+            <MdOutlineLightMode className="text-xl sm:text-2xl" />
           </div>
           {user ? (
             <div
               onClick={() => setIsUserOptionOpen(!isUserOptionOpen)}
-              className="user-info-icon relative w-[60%]  bg-neutral-300 dark:bg-neutral-800 rounded-full flex justify-between gap-1 items-center border border-neutral-400 dark:border-neutral-700 cursor-pointer flex-1"
+              className="user-info-icon relative basis-4/7 bg-neutral-300 h-full w-full dark:bg-neutral-800 rounded-full flex justify-between gap-1 items-center border border-neutral-400 dark:border-neutral-700 cursor-pointer flex-1"
             >
-              <div className="info-container flex items-center sm:gap-1 w-[80%]">
-                <img
-                  src="/assets/avatar.png"
-                  alt="user-avatar"
-                  className="h-12 md:h-14 w-12 md:w-14 rounded-full"
-                />
+              <div className="info-container h-full w-full flex items-center sm:gap-1 flex-1 min-w-0">
+                <div className="avatar-container h-full w-max flex items-center">
+                  <img
+                    src="/assets/avatar.png"
+                    alt="user-avatar"
+                    className="h-12 w-12 md:h-14 md:w-14 rounded-full shrink-0"
+                  />
+                </div>
 
-                <div className="user-info box-border  w-[60%]">
-                  <div className="name text-xs md:text-sm text-nowrap w-full truncate">
+                <div className="user-info box-border flex-1 w-full min-w-0 overflow-hidden">
+                  <div className="name text-xs md:text-sm w-full text-nowrap truncate">
                     {user.firstName}
                   </div>
-                  <div className="username text-[10px] md:text-xs text-neutral-500 w-full dark:text-neutral-400 truncate">
+                  <div className="username text-[10px] md:text-xs text-neutral-500 dark:text-neutral-400 w-full whitespace-nowrap overflow-hidden text-ellipsis">
                     @{user.username}
                   </div>
                 </div>
                 <div
                   onClick={logoutHandler}
-                  className={`user-options-dropdown absolute flex justify-center items-center text-sm bg-red-500 text-white  dark:bg-red-900 -bottom-16 z-10 left-[40%] rounded-2xl p-4 border border-red-600 dark:border-red-900 hover:bg-red-600 dark:hover:bg-red-800 ${
+                  className={`user-options-dropdown absolute flex justify-center items-center text-sm bg-red-500 text-white  dark:bg-red-900 -bottom-16 z-10 left-5 rounded-2xl p-4 border border-red-600 dark:border-red-900 hover:bg-red-600 dark:hover:bg-red-800 ${
                     isUserOptionOpen ? "" : "hidden"
                   }`}
                 >
-                  <div>Logout</div>
+                  <div>{t("logout")}</div>
                 </div>
               </div>
-              <div className="down-arrow w-[20%]">
+              <div className="down-arrow pe-2">
                 <IoIosArrowDown />
               </div>
             </div>
           ) : (
-            <div className="w-full login-register-button grid grid-cols-2 gap-1 md:gap-2 items-center text-sm lg:text-base">
-              <Link to={LOGIN_ROUTE}>
-                <button className="w-full bg-neutral-300 dark:bg-neutral-800 rounded-full border border-neutral-400 dark:border-neutral-700 px-4 py-2 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
-                  Login
-                </button>
+            <div className="basis-4/7 login-register-button flex items-stretch justify-stretch gap-1 md:gap-2 h-full text-sm lg:text-base">
+              <Link
+                to={LOGIN_ROUTE}
+                className="w-full flex items-center justify-center bg-neutral-300 dark:bg-neutral-800 rounded-full h-full border border-neutral-400 dark:border-neutral-700 lg:px-6 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600"
+              >
+                <button>{t("login")}</button>
               </Link>
-              <Link to={REGISTER_ROUTE}>
-                <button className="w-full bg-neutral-300 dark:bg-neutral-800 rounded-full border border-neutral-400 dark:border-neutral-700 px-4 py-2 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600">
-                  Register
-                </button>
+              <Link
+                to={REGISTER_ROUTE}
+                className="w-full flex items-center justify-center bg-neutral-300 dark:bg-neutral-800 rounded-full h-full border border-neutral-400 dark:border-neutral-700 lg:px-6 cursor-pointer hover:bg-neutral-400 dark:hover:bg-neutral-600"
+              >
+                <button>{t("register")}</button>
               </Link>
             </div>
           )}

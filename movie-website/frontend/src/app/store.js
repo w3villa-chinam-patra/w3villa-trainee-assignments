@@ -5,6 +5,7 @@ import { tmdbApi } from "./features/movies/tmdbApi";
 import filterReducer from "./features/filter/filterSlice";
 import voteReducer from "./features/vote/voteSlice";
 import appCategoryReducer from "./features/appCategory/appCategorySlice";
+import languageReducer from "./features/language/languageSlice";
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     search: searchReducer,
     filter: filterReducer,
     vote: voteReducer,
+    language: languageReducer,
     appCategory: appCategoryReducer,
     [tmdbApi.reducerPath]: tmdbApi.reducer,
   },

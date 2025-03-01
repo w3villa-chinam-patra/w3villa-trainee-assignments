@@ -5,11 +5,16 @@ import "./HeroSectionStyle.css";
 import { Pagination, Navigation, Autoplay } from "swiper/modules";
 import PosterSlide from "./PosterSlide";
 import { useEffect, useState } from "react";
-import { useGetMoviesQuery, useGetTVQuery } from "../../app/features/movies/tmdbApi";
+import {
+  useGetMoviesQuery,
+  useGetTVQuery,
+} from "../../app/features/movies/tmdbApi";
 import { useSelector } from "react-redux";
-import { MOVIE_CATEGORY, TV_CATEGORY } from "../../appCategor";
+import { MOVIE_CATEGORY, TV_CATEGORY } from "../../appCategory";
+import { useTranslation } from "react-i18next";
 
 function HeroSection() {
+  const { i18n } = useTranslation();
   const appCategory = useSelector((state) => state.appCategory);
   let { data, isLoading, isError } = {
     data: null,
@@ -21,10 +26,14 @@ function HeroSection() {
       data: movieData,
       isLoading,
       isError,
-    } = useGetMoviesQuery("popular");
+    } = useGetMoviesQuery({ movieList: "popular", language: i18n.language });
     data = movieData;
   } else if (appCategory === TV_CATEGORY) {
-    const { data: tvData, isLoading, isError } = useGetTVQuery("popular");
+    const {
+      data: tvData,
+      isLoading,
+      isError,
+    } = useGetTVQuery({ tvList: "popular", language: i18n.language });
     data = tvData;
   }
   return (
@@ -47,7 +56,7 @@ function HeroSection() {
                 content={{
                   id: movieInfo.id,
                   poster: `https://image.tmdb.org/t/p/original${movieInfo.backdrop_path}`,
-                  title: movieInfo.title,
+                  title: movieInfo.title || movieInfo.name,
                   overview: movieInfo.overview,
                 }}
               />

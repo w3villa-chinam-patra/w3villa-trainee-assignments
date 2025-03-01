@@ -23,8 +23,11 @@ import { setUser } from "../../app/features/user/userSlice";
 import { auth } from "../../service/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import Logo from "../Logo";
+import { useTranslation } from "react-i18next";
+import i18n from "../../i18n";
 
 function Sidebar({ isHamburgerOpen, setIsHamburgerOpen }) {
+  const { t } = useTranslation();
   const user = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,7 +47,7 @@ function Sidebar({ isHamburgerOpen, setIsHamburgerOpen }) {
         isHamburgerOpen ? "left-2" : "-left-full"
       } absolute z-30 sm:block sm:static bg-neutral-300 dark:bg-neutral-800 sm:h-full inset-y-2 rounded-2xl p-4 md:p-6 border dark:border-neutral-700 border-neutral-400`}
     >
-      <div className="flex justify-end mb-2">
+      <div className="flex justify-end mb-2 sm:hidden">
         <div onClick={() => setIsHamburgerOpen(false)}>
           <RxCross2 />
         </div>
@@ -53,24 +56,26 @@ function Sidebar({ isHamburgerOpen, setIsHamburgerOpen }) {
       <div className="menu-container py-6">
         <Menu
           options={[
-            { icon: <GoHome />, title: "Home", to: HOME_ROUTE },
-            { icon: <MdOutlineExplore />, title: "Explore", to: EXPLORE_ROUTE },
+            { icon: <GoHome />, title: t("home"), to: HOME_ROUTE },
+            { icon: <MdOutlineExplore />, title: t("explore"), to: EXPLORE_ROUTE },
             {
               icon: <MdFavoriteBorder />,
-              title: "Favorites",
+              title: t("favorites"),
               to: FAVORITES_ROUTE,
             },
-            { icon: <MdHowToVote />, title: "Top Voted", to: TOP_VOTED_ROUTE },
+            { icon: <MdHowToVote />, title: t("topVoted"), to: TOP_VOTED_ROUTE },
           ]}
         />
         <div className="line-break h-0.5 bg-neutral-400 dark:bg-neutral-700 rounded-full"></div>
         <Menu
-          options={
-            [
-              // { icon: <FiUser />, title: "Profile", to: PROFILE_ROUTE },
-              { icon: <IoSettingsOutline />, title: "Settings", to: SETTINGS_ROUTE },
-            ]
-          }
+          options={[
+            // { icon: <FiUser />, title: "Profile", to: PROFILE_ROUTE },
+            {
+              icon: <IoSettingsOutline />,
+              title: t("settings"),
+              to: SETTINGS_ROUTE,
+            },
+          ]}
         />
         {user ? (
           <div
@@ -78,7 +83,7 @@ function Sidebar({ isHamburgerOpen, setIsHamburgerOpen }) {
             className="logout-menu text-sm md:text-base flex gap-2 items-center my-4 md:my-6 cursor-pointer hover:text-red-400"
           >
             <IoMdLogOut className="text-base md:text-xl" />
-            <div className="title">Logout</div>
+            <div className="title">{t("logout")}</div>
           </div>
         ) : (
           <Link
@@ -86,7 +91,7 @@ function Sidebar({ isHamburgerOpen, setIsHamburgerOpen }) {
             className="logout-menu text-sm md:text-base flex gap-2 items-center my-4 md:my-6 cursor-pointer hover:text-emerald-500 dark:hover:text-emerald-400"
           >
             <IoMdLogIn className="text-base md:text-xl" />
-            <div className="title">Login</div>
+            <div className="title">{t("login")}</div>
           </Link>
         )}
       </div>

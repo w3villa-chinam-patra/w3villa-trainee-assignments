@@ -24,6 +24,7 @@ function Register() {
     }
     const registerHandler = async (event) => {
         event.preventDefault();
+        
         setIsLoading(true);
         try {
             await createUserWithEmailAndPassword(auth, registerInfo.email, registerInfo.password);

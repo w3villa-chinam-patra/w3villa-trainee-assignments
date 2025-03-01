@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from "react";
 import Card from "./Card";
-import { useGetMoviesQuery, useGetTVQuery } from "../../app/features/movies/tmdbApi";
+import {
+  useGetMoviesQuery,
+  useGetTVQuery,
+} from "../../app/features/movies/tmdbApi";
 import ShimmerCard from "./ShimmerCard";
 import { useSelector } from "react-redux";
-import { MOVIE_CATEGORY, TV_CATEGORY } from "../../appCategor";
+import { MOVIE_CATEGORY, TV_CATEGORY } from "../../appCategory";
+import { useTranslation } from "react-i18next";
 
 function CardContainer({ list }) {
+  const { i18n } = useTranslation();
   const appCategory = useSelector((state) => state.appCategory);
   let { data, isLoading, isError } = {
     data: null,
@@ -13,10 +18,18 @@ function CardContainer({ list }) {
     isError: null,
   };
   if (appCategory === MOVIE_CATEGORY) {
-    const { data: movieData, isLoading, isError } = useGetMoviesQuery(list);
+    const {
+      data: movieData,
+      isLoading,
+      isError,
+    } = useGetMoviesQuery({ movieList: list, language: i18n.language });
     data = movieData;
   } else if (appCategory === TV_CATEGORY) {
-    const { data: tvData, isLoading, isError } = useGetTVQuery(list);
+    const {
+      data: tvData,
+      isLoading,
+      isError,
+    } = useGetTVQuery({ tvList: list, language: i18n.language });
     data = tvData;
   }
   return (
@@ -31,9 +44,9 @@ function CardContainer({ list }) {
               content={{
                 id: cardDetail.id,
                 poster: `https://image.tmdb.org/t/p/w342${cardDetail.poster_path}`,
-                title: cardDetail.title,
+                title: cardDetail.title || cardDetail.name,
                 review: cardDetail.vote_average,
-                year: cardDetail.release_date,
+                year: cardDetail.release_date || cardDetail.first_air_date,
               }}
             />
           ))}

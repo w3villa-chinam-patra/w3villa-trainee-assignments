@@ -6,9 +6,11 @@ import {
 import Card from "../card/Card";
 import { useDispatch, useSelector } from "react-redux";
 import ShimmerCard from "../card/ShimmerCard";
-import { MOVIE_CATEGORY } from "../../appCategor";
+import { MOVIE_CATEGORY } from "../../appCategory";
+import { useTranslation } from "react-i18next";
 
 function Explore() {
+  const { i18n } = useTranslation();
   const [page, setPage] = useState(1);
   const appCategory = useSelector((state) => state.appCategory);
   const genreFilter = useSelector((store) => store.filter);
@@ -16,12 +18,14 @@ function Explore() {
     appCategory,
     page,
     genreId: genreFilter.id,
+    language: i18n.language,
   });
   const [exploreData, setExploreData] = useState([]);
   const searchInputText = useSelector((state) => state.search);
   const { data: searchResults, isFetching } = useGetSearchResultsQuery({
     appCategory,
     searchInputText,
+    language: i18n.language,
   });
   const dispatch = useDispatch();
   const exploreSectionRef = useRef();
