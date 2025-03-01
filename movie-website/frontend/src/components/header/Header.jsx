@@ -254,7 +254,7 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
                 </div>
 
                 <div className="user-info box-border flex-1 w-full min-w-0 overflow-hidden">
-                  <div className="name text-xs md:text-sm w-full text-nowrap truncate">
+                  <div className="name text-xs md:text-sm w-full text-wrap truncate">
                     {user.firstName}
                   </div>
                   <div className="username text-[10px] md:text-xs text-neutral-500 dark:text-neutral-400 w-full whitespace-nowrap overflow-hidden text-ellipsis">
