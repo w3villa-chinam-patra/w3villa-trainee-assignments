@@ -12,7 +12,7 @@ i18n
     resources: {
       en: {
         translation: {
-          langSymbol: "en-US 🇺🇸",
+          langSymbol: "🇺🇸",
           home: "Home",
           explore: "Explore",
           favorites: "Favorites",
@@ -45,7 +45,7 @@ i18n
       },
       es: {
         translation: {
-          langSymbol: "es-ES 🇪🇸",
+          langSymbol: "🇪🇸",
           home: "Inicio",
           explore: "Explorar",
           favorites: "Favoritos",
@@ -78,7 +78,7 @@ i18n
       },
       fr: {
         translation: {
-          langSymbol: "fr-FR 🇫🇷",
+          langSymbol: "🇫🇷",
           home: "Accueil",
           explore: "Explorer",
           favorites: "Favoris",
