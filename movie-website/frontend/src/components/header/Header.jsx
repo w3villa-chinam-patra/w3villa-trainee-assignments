@@ -269,11 +269,21 @@ function Header({ setIsHamburgerOpen, setIsDark }) {
                 </div>
                 <div
                   onClick={logoutHandler}
-                  className={`user-options-dropdown absolute flex justify-center items-center text-sm bg-red-500 text-white  dark:bg-red-900 -bottom-16 z-10 right-0 rounded-2xl p-4 border border-red-600 dark:border-red-900 hover:bg-red-600 dark:hover:bg-red-800 ${
+                  className={`user-options-dropdown bg-neutral-200 dark:bg-neutral-800 md:p-0 z-10 rounded-2xl absolute flex justify-center items-center text-sm  right-0 top-14 ${
                     isUserOptionOpen ? "" : "hidden"
                   }`}
                 >
-                  <div>{t("logout")}</div>
+                  <div className="user-info box-border w-full min-w-0 block md:hidden m-2 border border-neutral-400 rounded-2xl p-2 bg-neutral-300 dark:bg-neutral-700">
+                  <div className="name text-xs md:text-sm  md:max-w-[200px] truncate">
+                    {user.firstName}
+                  </div>
+                  <div className="username text-[10px] md:text-xs  md:max-w-[200px] text-neutral-500 dark:text-neutral-40 whitespace-nowrap overflow-hidden text-ellipsis">
+                    @{user.username}
+                  </div>
+                </div>
+                  <div className=" bg-red-500 text-white  dark:bg-red-700 -bottom-16  rounded-xl p-2 m-2 md:m-0 md:p-4 border border-red-600 dark:border-red-900 hover:bg-red-600 dark:hover:bg-red-800">
+                    {t("logout")}
+                  </div>
                 </div>
               </div>
               <div className="down-arrow px-2">
